@@ -1,0 +1,1933 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\cliu\Documents\GitHub\PanelEconometrics\HW2\HW2_log.log
+  log type:  text
+ opened on:  13 Mar 2019, 10:58:31
+
+. use "gasoline.dta", clear
+
+. 
+. 
+. ******************************** Data Cleaning *********************************
+. encode country, generate(ncountry)
+
+. tsset ncountry year
+       panel variable:  ncountry (strongly balanced)
+        time variable:  year, 1960 to 1978
+                delta:  1 unit
+
+. gen iota = 1
+
+. 
+. *******************************************************************************
+. * Question 1
+. * (a) FE, country effects
+. xtreg lgaspcar lincomep lrpmg lcarpcap, fe
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap  i.ncountry, fe
+note: 2.ncountry omitted because of collinearity
+note: 3.ncountry omitted because of collinearity
+note: 4.ncountry omitted because of collinearity
+note: 5.ncountry omitted because of collinearity
+note: 6.ncountry omitted because of collinearity
+note: 7.ncountry omitted because of collinearity
+note: 8.ncountry omitted because of collinearity
+note: 9.ncountry omitted because of collinearity
+note: 10.ncountry omitted because of collinearity
+note: 11.ncountry omitted because of collinearity
+note: 12.ncountry omitted because of collinearity
+note: 13.ncountry omitted because of collinearity
+note: 14.ncountry omitted because of collinearity
+note: 15.ncountry omitted because of collinearity
+note: 16.ncountry omitted because of collinearity
+note: 17.ncountry omitted because of collinearity
+note: 18.ncountry omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+             |
+    ncountry |
+    BELGIUM  |          0  (omitted)
+     CANADA  |          0  (omitted)
+    DENMARK  |          0  (omitted)
+     FRANCE  |          0  (omitted)
+    GERMANY  |          0  (omitted)
+     GREECE  |          0  (omitted)
+    IRELAND  |          0  (omitted)
+      ITALY  |          0  (omitted)
+      JAPAN  |          0  (omitted)
+   NETHERLA  |          0  (omitted)
+     NORWAY  |          0  (omitted)
+      SPAIN  |          0  (omitted)
+     SWEDEN  |          0  (omitted)
+   SWITZERL  |          0  (omitted)
+     TURKEY  |          0  (omitted)
+       U.K.  |          0  (omitted)
+     U.S.A.  |          0  (omitted)
+             |
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. 
+. matrix b = e(b)'
+
+. matrix list b
+
+b[22,1]
+                      y1
+    lincomep   .66224984
+       lrpmg   -.3217025
+    lcarpcap  -.64048292
+ 1b.ncountry           0
+ 2o.ncountry           0
+ 3o.ncountry           0
+ 4o.ncountry           0
+ 5o.ncountry           0
+ 6o.ncountry           0
+ 7o.ncountry           0
+ 8o.ncountry           0
+ 9o.ncountry           0
+10o.ncountry           0
+11o.ncountry           0
+12o.ncountry           0
+13o.ncountry           0
+14o.ncountry           0
+15o.ncountry           0
+16o.ncountry           0
+17o.ncountry           0
+18o.ncountry           0
+       _cons   2.4026704
+
+. matrix bhat = b[5..21,1..1]
+
+. matrix list bhat
+
+bhat[17,1]
+              y1
+ 2o.ncountry   0
+ 3o.ncountry   0
+ 4o.ncountry   0
+ 5o.ncountry   0
+ 6o.ncountry   0
+ 7o.ncountry   0
+ 8o.ncountry   0
+ 9o.ncountry   0
+10o.ncountry   0
+11o.ncountry   0
+12o.ncountry   0
+13o.ncountry   0
+14o.ncountry   0
+15o.ncountry   0
+16o.ncountry   0
+17o.ncountry   0
+18o.ncountry   0
+
+. matrix V = e(V)
+
+. matrix list V
+
+symmetric V[22,22]
+                                                          1b.         2o.         3o.         4o.         5o.         6o.         7o.         8o.         9o.        10o.
+                lincomep       lrpmg    lcarpcap    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry
+    lincomep   .00538551
+       lrpmg   .00028958   .00194474
+    lcarpcap   -.0020491   .00008864   .00088083
+ 1b.ncountry           0           0           0           0
+ 2o.ncountry           0           0           0           0           0
+ 3o.ncountry           0           0           0           0           0           0
+ 4o.ncountry           0           0           0           0           0           0           0
+ 5o.ncountry           0           0           0           0           0           0           0           0
+ 6o.ncountry           0           0           0           0           0           0           0           0           0
+ 7o.ncountry           0           0           0           0           0           0           0           0           0           0
+ 8o.ncountry           0           0           0           0           0           0           0           0           0           0           0
+ 9o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0
+10o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+11o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+12o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+13o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+14o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+15o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+16o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+17o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+18o.ncountry           0           0           0           0           0           0           0           0           0           0           0           0           0
+       _cons   .01468789   .00359662  -.00456958           0           0           0           0           0           0           0           0           0           0
+
+                     11o.        12o.        13o.        14o.        15o.        16o.        17o.        18o.            
+                ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry    ncountry       _cons
+11o.ncountry           0
+12o.ncountry           0           0
+13o.ncountry           0           0           0
+14o.ncountry           0           0           0           0
+15o.ncountry           0           0           0           0           0
+16o.ncountry           0           0           0           0           0           0
+17o.ncountry           0           0           0           0           0           0           0
+18o.ncountry           0           0           0           0           0           0           0           0
+       _cons           0           0           0           0           0           0           0           0   .05076431
+
+. matrix Vhat = V[5..21,5..21]
+
+. matrix list Vhat
+
+symmetric Vhat[17,17]
+                    2o.       3o.       4o.       5o.       6o.       7o.       8o.       9o.      10o.      11o.      12o.      13o.      14o.      15o.      16o.      17o.
+              ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry  ncountry
+ 2o.ncountry         0
+ 3o.ncountry         0         0
+ 4o.ncountry         0         0         0
+ 5o.ncountry         0         0         0         0
+ 6o.ncountry         0         0         0         0         0
+ 7o.ncountry         0         0         0         0         0         0
+ 8o.ncountry         0         0         0         0         0         0         0
+ 9o.ncountry         0         0         0         0         0         0         0         0
+10o.ncountry         0         0         0         0         0         0         0         0         0
+11o.ncountry         0         0         0         0         0         0         0         0         0         0
+12o.ncountry         0         0         0         0         0         0         0         0         0         0         0
+13o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0
+14o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0         0
+15o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+16o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+17o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+18o.ncountry         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+
+                   18o.
+              ncountry
+18o.ncountry         0
+
+. 
+. mata: I_N = I(17)
+
+. mata: st_matrix("r(I_N)",I_N)
+
+. 
+. matrix R = r(I_N)
+
+. matrix list R
+
+symmetric R[17,17]
+      c1   c2   c3   c4   c5   c6   c7   c8   c9  c10  c11  c12  c13  c14  c15  c16  c17
+ r1    1
+ r2    0    1
+ r3    0    0    1
+ r4    0    0    0    1
+ r5    0    0    0    0    1
+ r6    0    0    0    0    0    1
+ r7    0    0    0    0    0    0    1
+ r8    0    0    0    0    0    0    0    1
+ r9    0    0    0    0    0    0    0    0    1
+r10    0    0    0    0    0    0    0    0    0    1
+r11    0    0    0    0    0    0    0    0    0    0    1
+r12    0    0    0    0    0    0    0    0    0    0    0    1
+r13    0    0    0    0    0    0    0    0    0    0    0    0    1
+r14    0    0    0    0    0    0    0    0    0    0    0    0    0    1
+r15    0    0    0    0    0    0    0    0    0    0    0    0    0    0    1
+r16    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    1
+r17    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    1
+
+. matrix q = J(17,1,0)
+
+. matrix list q
+
+q[17,1]
+     c1
+ r1   0
+ r2   0
+ r3   0
+ r4   0
+ r5   0
+ r6   0
+ r7   0
+ r8   0
+ r9   0
+r10   0
+r11   0
+r12   0
+r13   0
+r14   0
+r15   0
+r16   0
+r17   0
+
+. 
+. matrix mhat = R*bhat-q
+
+. matrix list mhat
+
+mhat[17,1]
+     c1
+ r1   0
+ r2   0
+ r3   0
+ r4   0
+ r5   0
+ r6   0
+ r7   0
+ r8   0
+ r9   0
+r10   0
+r11   0
+r12   0
+r13   0
+r14   0
+r15   0
+r16   0
+r17   0
+
+. matrix covmatrixm = R*Vhat*R'
+
+. matrix list covmatrixm
+
+symmetric covmatrixm[17,17]
+      r1   r2   r3   r4   r5   r6   r7   r8   r9  r10  r11  r12  r13  r14  r15  r16  r17
+ r1    0
+ r2    0    0
+ r3    0    0    0
+ r4    0    0    0    0
+ r5    0    0    0    0    0
+ r6    0    0    0    0    0    0
+ r7    0    0    0    0    0    0    0
+ r8    0    0    0    0    0    0    0    0
+ r9    0    0    0    0    0    0    0    0    0
+r10    0    0    0    0    0    0    0    0    0    0
+r11    0    0    0    0    0    0    0    0    0    0    0
+r12    0    0    0    0    0    0    0    0    0    0    0    0
+r13    0    0    0    0    0    0    0    0    0    0    0    0    0
+r14    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+r15    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+r16    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+r17    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0    0
+
+. local J = 17
+
+. 
+. * calculate F
+. matrix F = mhat'*invsym(covmatrixm)*mhat/`J' 
+
+. matrix list F
+
+symmetric F[1,1]
+    c1
+c1   0
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8829                                         min =         19
+     between = 0.5134                                         avg =       19.0
+     overall = 0.5554                                         max =         19
+
+                                                F(21,303)         =     108.84
+corr(u_i, Xb)  = -0.5107                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .0513687   .0913862     0.56   0.574    -.1284632    .2312007
+       lrpmg |  -.1928498   .0428598    -4.50   0.000    -.2771904   -.1085092
+    lcarpcap |  -.5934477   .0276693   -21.45   0.000    -.6478961   -.5389994
+             |
+        year |
+       1961  |   .0409697   .0272476     1.50   0.134    -.0126488    .0945881
+       1962  |   .0442492   .0275952     1.60   0.110    -.0100533    .0985516
+       1963  |   .0647444   .0282765     2.29   0.023     .0091011    .1203876
+       1964  |   .1059944   .0292974     3.62   0.000     .0483423    .1636466
+       1965  |   .1241339   .0300492     4.13   0.000     .0650024    .1832654
+       1966  |   .1678297   .0310464     5.41   0.000     .1067359    .2289235
+       1967  |   .1988323   .0320478     6.20   0.000     .1357678    .2618967
+       1968  |   .2300765   .0332006     6.93   0.000     .1647436    .2954095
+       1969  |    .242999   .0353038     6.88   0.000     .1735273    .3124707
+       1970  |   .2750797   .0371819     7.40   0.000     .2019123     .348247
+       1971  |   .3041981    .038516     7.90   0.000     .2284053    .3799908
+       1972  |   .3321357    .040532     8.19   0.000     .2523759    .4118954
+       1973  |   .3697066   .0432093     8.56   0.000     .2846782     .454735
+       1974  |   .3279376   .0422317     7.77   0.000     .2448331    .4110421
+       1975  |   .3623918   .0418767     8.65   0.000     .2799859    .4447977
+       1976  |   .3708908   .0436262     8.50   0.000     .2850421    .4567395
+       1977  |    .385702   .0445593     8.66   0.000     .2980171    .4733869
+       1978  |    .400956   .0464087     8.64   0.000     .3096317    .4922803
+             |
+       _cons |  -1.083988    .403018    -2.69   0.008    -1.877056   -.2909195
+-------------+----------------------------------------------------------------
+     sigma_u |  .42773185
+     sigma_e |  .08118269
+         rho |  .96522924   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 303) = 113.35                   Prob > F = 0.0000
+
+. testparm i.year
+
+ ( 1)  1961.year = 0
+ ( 2)  1962.year = 0
+ ( 3)  1963.year = 0
+ ( 4)  1964.year = 0
+ ( 5)  1965.year = 0
+ ( 6)  1966.year = 0
+ ( 7)  1967.year = 0
+ ( 8)  1968.year = 0
+ ( 9)  1969.year = 0
+ (10)  1970.year = 0
+ (11)  1971.year = 0
+ (12)  1972.year = 0
+ (13)  1973.year = 0
+ (14)  1974.year = 0
+ (15)  1975.year = 0
+ (16)  1976.year = 0
+ (17)  1977.year = 0
+ (18)  1978.year = 0
+
+       F( 18,   303) =    6.23
+            Prob > F =    0.0000
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8829                                         min =         19
+     between = 0.5134                                         avg =       19.0
+     overall = 0.5554                                         max =         19
+
+                                                F(21,303)         =     108.84
+corr(u_i, Xb)  = -0.5107                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .0513687   .0913862     0.56   0.574    -.1284632    .2312007
+       lrpmg |  -.1928498   .0428598    -4.50   0.000    -.2771904   -.1085092
+    lcarpcap |  -.5934477   .0276693   -21.45   0.000    -.6478961   -.5389994
+             |
+        year |
+       1961  |   .0409697   .0272476     1.50   0.134    -.0126488    .0945881
+       1962  |   .0442492   .0275952     1.60   0.110    -.0100533    .0985516
+       1963  |   .0647444   .0282765     2.29   0.023     .0091011    .1203876
+       1964  |   .1059944   .0292974     3.62   0.000     .0483423    .1636466
+       1965  |   .1241339   .0300492     4.13   0.000     .0650024    .1832654
+       1966  |   .1678297   .0310464     5.41   0.000     .1067359    .2289235
+       1967  |   .1988323   .0320478     6.20   0.000     .1357678    .2618967
+       1968  |   .2300765   .0332006     6.93   0.000     .1647436    .2954095
+       1969  |    .242999   .0353038     6.88   0.000     .1735273    .3124707
+       1970  |   .2750797   .0371819     7.40   0.000     .2019123     .348247
+       1971  |   .3041981    .038516     7.90   0.000     .2284053    .3799908
+       1972  |   .3321357    .040532     8.19   0.000     .2523759    .4118954
+       1973  |   .3697066   .0432093     8.56   0.000     .2846782     .454735
+       1974  |   .3279376   .0422317     7.77   0.000     .2448331    .4110421
+       1975  |   .3623918   .0418767     8.65   0.000     .2799859    .4447977
+       1976  |   .3708908   .0436262     8.50   0.000     .2850421    .4567395
+       1977  |    .385702   .0445593     8.66   0.000     .2980171    .4733869
+       1978  |    .400956   .0464087     8.64   0.000     .3096317    .4922803
+             |
+       _cons |  -1.083988    .403018    -2.69   0.008    -1.877056   -.2909195
+-------------+----------------------------------------------------------------
+     sigma_u |  .42773185
+     sigma_e |  .08118269
+         rho |  .96522924   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 303) = 113.35                   Prob > F = 0.0000
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8829                                         min =         19
+     between = 0.5134                                         avg =       19.0
+     overall = 0.5554                                         max =         19
+
+                                                F(21,303)         =     108.84
+corr(u_i, Xb)  = -0.5107                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .0513687   .0913862     0.56   0.574    -.1284632    .2312007
+       lrpmg |  -.1928498   .0428598    -4.50   0.000    -.2771904   -.1085092
+    lcarpcap |  -.5934477   .0276693   -21.45   0.000    -.6478961   -.5389994
+             |
+        year |
+       1961  |   .0409697   .0272476     1.50   0.134    -.0126488    .0945881
+       1962  |   .0442492   .0275952     1.60   0.110    -.0100533    .0985516
+       1963  |   .0647444   .0282765     2.29   0.023     .0091011    .1203876
+       1964  |   .1059944   .0292974     3.62   0.000     .0483423    .1636466
+       1965  |   .1241339   .0300492     4.13   0.000     .0650024    .1832654
+       1966  |   .1678297   .0310464     5.41   0.000     .1067359    .2289235
+       1967  |   .1988323   .0320478     6.20   0.000     .1357678    .2618967
+       1968  |   .2300765   .0332006     6.93   0.000     .1647436    .2954095
+       1969  |    .242999   .0353038     6.88   0.000     .1735273    .3124707
+       1970  |   .2750797   .0371819     7.40   0.000     .2019123     .348247
+       1971  |   .3041981    .038516     7.90   0.000     .2284053    .3799908
+       1972  |   .3321357    .040532     8.19   0.000     .2523759    .4118954
+       1973  |   .3697066   .0432093     8.56   0.000     .2846782     .454735
+       1974  |   .3279376   .0422317     7.77   0.000     .2448331    .4110421
+       1975  |   .3623918   .0418767     8.65   0.000     .2799859    .4447977
+       1976  |   .3708908   .0436262     8.50   0.000     .2850421    .4567395
+       1977  |    .385702   .0445593     8.66   0.000     .2980171    .4733869
+       1978  |    .400956   .0464087     8.64   0.000     .3096317    .4922803
+             |
+       _cons |  -1.083988    .403018    -2.69   0.008    -1.877056   -.2909195
+-------------+----------------------------------------------------------------
+     sigma_u |  .42773185
+     sigma_e |  .08118269
+         rho |  .96522924   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 303) = 113.35                   Prob > F = 0.0000
+
+. testparm i.year
+
+ ( 1)  1961.year = 0
+ ( 2)  1962.year = 0
+ ( 3)  1963.year = 0
+ ( 4)  1964.year = 0
+ ( 5)  1965.year = 0
+ ( 6)  1966.year = 0
+ ( 7)  1967.year = 0
+ ( 8)  1968.year = 0
+ ( 9)  1969.year = 0
+ (10)  1970.year = 0
+ (11)  1971.year = 0
+ (12)  1972.year = 0
+ (13)  1973.year = 0
+ (14)  1974.year = 0
+ (15)  1975.year = 0
+ (16)  1976.year = 0
+ (17)  1977.year = 0
+ (18)  1978.year = 0
+
+       F( 18,   303) =    6.23
+            Prob > F =    0.0000
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap i.year, fe
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8829                                         min =         19
+     between = 0.5134                                         avg =       19.0
+     overall = 0.5554                                         max =         19
+
+                                                F(21,303)         =     108.84
+corr(u_i, Xb)  = -0.5107                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .0513687   .0913862     0.56   0.574    -.1284632    .2312007
+       lrpmg |  -.1928498   .0428598    -4.50   0.000    -.2771904   -.1085092
+    lcarpcap |  -.5934477   .0276693   -21.45   0.000    -.6478961   -.5389994
+             |
+        year |
+       1961  |   .0409697   .0272476     1.50   0.134    -.0126488    .0945881
+       1962  |   .0442492   .0275952     1.60   0.110    -.0100533    .0985516
+       1963  |   .0647444   .0282765     2.29   0.023     .0091011    .1203876
+       1964  |   .1059944   .0292974     3.62   0.000     .0483423    .1636466
+       1965  |   .1241339   .0300492     4.13   0.000     .0650024    .1832654
+       1966  |   .1678297   .0310464     5.41   0.000     .1067359    .2289235
+       1967  |   .1988323   .0320478     6.20   0.000     .1357678    .2618967
+       1968  |   .2300765   .0332006     6.93   0.000     .1647436    .2954095
+       1969  |    .242999   .0353038     6.88   0.000     .1735273    .3124707
+       1970  |   .2750797   .0371819     7.40   0.000     .2019123     .348247
+       1971  |   .3041981    .038516     7.90   0.000     .2284053    .3799908
+       1972  |   .3321357    .040532     8.19   0.000     .2523759    .4118954
+       1973  |   .3697066   .0432093     8.56   0.000     .2846782     .454735
+       1974  |   .3279376   .0422317     7.77   0.000     .2448331    .4110421
+       1975  |   .3623918   .0418767     8.65   0.000     .2799859    .4447977
+       1976  |   .3708908   .0436262     8.50   0.000     .2850421    .4567395
+       1977  |    .385702   .0445593     8.66   0.000     .2980171    .4733869
+       1978  |    .400956   .0464087     8.64   0.000     .3096317    .4922803
+             |
+       _cons |  -1.083988    .403018    -2.69   0.008    -1.877056   -.2909195
+-------------+----------------------------------------------------------------
+     sigma_u |  .42773185
+     sigma_e |  .08118269
+         rho |  .96522924   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 303) = 113.35                   Prob > F = 0.0000
+
+. 
+. matrix b = e(b)'
+
+. matrix V = e(V)
+
+. matrix bhat = b[5..22,1..1]
+
+. matrix Vhat = V[5..22,5..22]
+
+. mata: I_N = I(18)
+
+. mata: st_matrix("r(I_N)",I_N)
+
+. matrix R = r(I_N)
+
+. matrix q = J(18,1,0)
+
+. matrix mhat = R*bhat-q
+
+. matrix covmatrixm = R*Vhat*R'
+
+. local J = 18
+
+. matrix F = mhat'*invsym(covmatrixm)*mhat/`J'
+
+. matrix list F
+
+symmetric F[1,1]
+           c1
+c1  6.2338473
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, mle
+
+Fitting constant-only model:
+Iteration 0:   log likelihood = -22.421481
+Iteration 1:   log likelihood = -22.396814
+Iteration 2:   log likelihood = -22.396801
+
+Fitting full model:
+Iteration 0:   log likelihood =  216.74308
+Iteration 1:   log likelihood =  230.51837
+Iteration 2:   log likelihood =   273.0581
+Iteration 3:   log likelihood =  281.79287
+Iteration 4:   log likelihood =  282.47033
+Iteration 5:   log likelihood =  282.47697
+Iteration 6:   log likelihood =  282.47697
+
+Random-effects ML regression                    Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+Random effects u_i ~ Gaussian                   Obs per group:
+                                                              min =         19
+                                                              avg =       19.0
+                                                              max =         19
+
+                                                LR chi2(3)        =     609.75
+Log likelihood  =  282.47697                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5881334   .0659581     8.92   0.000     .4588578     .717409
+       lrpmg |  -.3780466   .0440663    -8.58   0.000     -.464415   -.2916782
+    lcarpcap |  -.6163722   .0272054   -22.66   0.000    -.6696938   -.5630506
+       _cons |   2.136168   .2156039     9.91   0.000     1.713593    2.558744
+-------------+----------------------------------------------------------------
+    /sigma_u |   .2922939   .0545496                      .2027512    .4213821
+    /sigma_e |   .0922537   .0036482                      .0853734    .0996885
+         rho |   .9094086   .0317608                      .8303747    .9571561
+------------------------------------------------------------------------------
+LR test of sigma_u=0: chibar2(01) = 463.97             Prob >= chibar2 = 0.000
+
+. 
+end of do-file
+
+. ereturn list
+
+scalars:
+               e(ll_0) =  -22.39680135026418
+                 e(ll) =  282.4769678358167
+               e(df_m) =  3
+               e(chi2) =  609.7475383721618
+                e(N_g) =  18
+              e(g_min) =  19
+              e(g_avg) =  19
+              e(g_max) =  19
+                  e(N) =  342
+               e(rank) =  6
+               e(ll_c) =  50.49288163280834
+             e(chi2_c) =  463.9681724060167
+            e(sigma_u) =  .2922938917847077
+            e(sigma_e) =  .0922536814355045
+                e(rho) =  .9094085966018441
+                  e(p) =  6.5819773967e-103
+
+macros:
+            e(cmdline) : "xtreg lgaspcar lincomep lrpmg lcarpcap, mle"
+             e(depvar) : "lgaspcar"
+                e(cmd) : "xtreg"
+               e(ivar) : "ncountry"
+       e(marginsnotok) : "E U UE SCore STDP XBU"
+            e(predict) : "xtrefe_p"
+                e(vce) : "oim"
+            e(chi2_ct) : "LR"
+         e(properties) : "b V"
+              e(model) : "ml"
+              e(title) : "Random-effects ML regression"
+            e(distrib) : "Gaussian"
+           e(chi2type) : "LR"
+
+matrices:
+                  e(b) :  1 x 6
+                  e(V) :  6 x 6
+
+functions:
+             e(sample)   
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. * c) RE, country effects
+. xtreg lgaspcar lincomep lrpmg lcarpcap, mle
+
+Fitting constant-only model:
+Iteration 0:   log likelihood = -22.421481
+Iteration 1:   log likelihood = -22.396814
+Iteration 2:   log likelihood = -22.396801
+
+Fitting full model:
+Iteration 0:   log likelihood =  216.74308
+Iteration 1:   log likelihood =  230.51837
+Iteration 2:   log likelihood =   273.0581
+Iteration 3:   log likelihood =  281.79287
+Iteration 4:   log likelihood =  282.47033
+Iteration 5:   log likelihood =  282.47697
+Iteration 6:   log likelihood =  282.47697
+
+Random-effects ML regression                    Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+Random effects u_i ~ Gaussian                   Obs per group:
+                                                              min =         19
+                                                              avg =       19.0
+                                                              max =         19
+
+                                                LR chi2(3)        =     609.75
+Log likelihood  =  282.47697                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5881334   .0659581     8.92   0.000     .4588578     .717409
+       lrpmg |  -.3780466   .0440663    -8.58   0.000     -.464415   -.2916782
+    lcarpcap |  -.6163722   .0272054   -22.66   0.000    -.6696938   -.5630506
+       _cons |   2.136168   .2156039     9.91   0.000     1.713593    2.558744
+-------------+----------------------------------------------------------------
+    /sigma_u |   .2922939   .0545496                      .2027512    .4213821
+    /sigma_e |   .0922537   .0036482                      .0853734    .0996885
+         rho |   .9094086   .0317608                      .8303747    .9571561
+------------------------------------------------------------------------------
+LR test of sigma_u=0: chibar2(01) = 463.97             Prob >= chibar2 = 0.000
+
+. ereturn list
+
+scalars:
+               e(ll_0) =  -22.39680135026418
+                 e(ll) =  282.4769678358167
+               e(df_m) =  3
+               e(chi2) =  609.7475383721618
+                e(N_g) =  18
+              e(g_min) =  19
+              e(g_avg) =  19
+              e(g_max) =  19
+                  e(N) =  342
+               e(rank) =  6
+               e(ll_c) =  50.49288163280834
+             e(chi2_c) =  463.9681724060167
+            e(sigma_u) =  .2922938917847077
+            e(sigma_e) =  .0922536814355045
+                e(rho) =  .9094085966018441
+                  e(p) =  6.5819773967e-103
+
+macros:
+            e(cmdline) : "xtreg lgaspcar lincomep lrpmg lcarpcap, mle"
+             e(depvar) : "lgaspcar"
+                e(cmd) : "xtreg"
+               e(ivar) : "ncountry"
+       e(marginsnotok) : "E U UE SCore STDP XBU"
+            e(predict) : "xtrefe_p"
+                e(vce) : "oim"
+            e(chi2_ct) : "LR"
+         e(properties) : "b V"
+              e(model) : "ml"
+              e(title) : "Random-effects ML regression"
+            e(distrib) : "Gaussian"
+           e(chi2type) : "LR"
+
+matrices:
+                  e(b) :  1 x 6
+                  e(V) :  6 x 6
+
+functions:
+             e(sample)   
+
+. local ll_u = e(ll)
+
+. reg lgaspcar lincomep lrpmg lcarpcap
+
+      Source |       SS           df       MS      Number of obs   =       342
+-------------+----------------------------------   F(3, 338)       =    664.00
+       Model |  87.8386024         3  29.2795341   Prob > F        =    0.0000
+    Residual |  14.9043581       338  .044095734   R-squared       =    0.8549
+-------------+----------------------------------   Adj R-squared   =    0.8536
+       Total |  102.742961       341  .301299005   Root MSE        =    .20999
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .8899616   .0358058    24.86   0.000     .8195313    .9603919
+       lrpmg |  -.8917979   .0303147   -29.42   0.000    -.9514272   -.8321685
+    lcarpcap |  -.7633727   .0186083   -41.02   0.000    -.7999754   -.7267701
+       _cons |   2.391326   .1169343    20.45   0.000     2.161315    2.621336
+------------------------------------------------------------------------------
+
+. ereturn list
+
+scalars:
+                  e(N) =  342
+               e(df_m) =  3
+               e(df_r) =  338
+                  e(F) =  663.9992454490358
+                 e(r2) =  .8549354813838124
+               e(rmse) =  .2099898427715032
+                e(mss) =  87.83860244442768
+                e(rss) =  14.90435811471381
+               e(r2_a) =  .8536479264848521
+                 e(ll) =  50.49288163280834
+               e(ll_0) =  -279.6357305704827
+               e(rank) =  4
+
+macros:
+            e(cmdline) : "regress lgaspcar lincomep lrpmg lcarpcap"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "lgaspcar"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 4
+                  e(V) :  4 x 4
+
+functions:
+             e(sample)   
+
+. local ll_r = e(ll)
+
+. local LR = -2*(`ll_r'-`ll_u')
+
+. di `LR'
+463.96817
+
+. 
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. ereturn list
+
+scalars:
+               e(rank) =  4
+               e(df_m) =  3
+               e(chi2) =  1642.198937928733
+                  e(p) =  0
+            e(sigma_u) =  .1955446779604279
+            e(sigma_e) =  .0923303402322655
+              e(sigma) =  .2162466480805041
+                e(rho) =  .8176985584025714
+               e(rmse) =  .0954854636595087
+                  e(N) =  342
+               e(Tbar) =  19
+               e(Tcon) =  1
+                e(N_g) =  18
+              e(g_min) =  19
+              e(g_avg) =  19
+              e(g_max) =  19
+              e(theta) =  .892306751153392
+               e(r2_o) =  .7309214258287032
+               e(r2_b) =  .7099473049692985
+               e(r2_w) =  .8362628638710927
+
+macros:
+            e(cmdline) : "xtreg lgaspcar lincomep lrpmg lcarpcap, re"
+                e(cmd) : "xtreg"
+       e(marginsnotok) : "E U UE SCore STDP XBU"
+            e(predict) : "xtrere_p"
+              e(model) : "re"
+               e(ivar) : "ncountry"
+                e(vce) : "conventional"
+             e(depvar) : "lgaspcar"
+           e(chi2type) : "Wald"
+         e(properties) : "b V"
+
+matrices:
+                  e(b) :  1 x 4
+                  e(V) :  4 x 4
+               e(VCEf) :  4 x 4
+                 e(bf) :  1 x 4
+
+functions:
+             e(sample)   
+
+. local n = e(N)
+
+. local N = e(N_g)
+
+. local T = e(g_max)
+
+. local K = e(df_m)
+
+. local p = `n'-(`K'+1)
+
+. * Breusch and Pagan LM test for random effects
+. xttest0
+
+Breusch and Pagan Lagrangian multiplier test for random effects
+
+        lgaspcar[ncountry,t] = Xb + u[ncountry] + e[ncountry,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+                lgaspcar |    .301299       .5489071
+                       e |   .0085249       .0923303
+                       u |   .0382377       .1955447
+
+        Test:   Var(u) = 0
+                             chibar2(01) =  1465.55
+                          Prob > chibar2 =   0.0000
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. * a) Hausman Test: RE vs FE
+. xtreg lgaspcar lincomep lrpmg lcarpcap, fe 
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. matrix b = e(b)'
+
+. matrix V_b = e(V)
+
+. estimates store FE
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix V_B = e(V)
+
+. estimates store RE
+
+. hausman fixed random
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     fixed        random       Difference          S.E.
+-------------+----------------------------------------------------------------
+    lincomep |    .6622498     .5549858         .107264        .0434669
+       lrpmg |   -.3217025    -.4203893        .0986868        .0186143
+    lcarpcap |   -.6404829    -.6068402       -.0336428        .0151597
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =      302.80
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+
+. 
+. * Alternatively:
+. matrix bhat = b[1..3,1..1]
+
+. matrix V_bhat = V_b[1..3,1..3]
+
+. matrix Bhat = B[1..3,1..1]
+
+. matrix V_Bhat = V_B[1..3,1..3]
+
+. matrix inv_V_b_V_B = invsym(V_bhat-V_Bhat)
+
+. matrix q1 = Bhat-bhat
+
+. matrix hausman = q1'*inv_V_b_V_B*q1
+
+. local hausman = hausman[1,1]
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, fe 
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. matrix b = e(b)'
+
+. matrix V_b = e(V)
+
+. estimates store FE
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix V_B = e(V)
+
+. estimates store RE
+
+. hausman fixed random
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     fixed        random       Difference          S.E.
+-------------+----------------------------------------------------------------
+    lincomep |    .6622498     .5549858         .107264        .0434669
+       lrpmg |   -.3217025    -.4203893        .0986868        .0186143
+    lcarpcap |   -.6404829    -.6068402       -.0336428        .0151597
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =      302.80
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+
+. 
+. * Alternatively:
+. matrix bhat = b[1..3,1..1]
+
+. matrix V_bhat = V_b[1..3,1..3]
+
+. matrix Bhat = B[1..3,1..1]
+
+. matrix V_Bhat = V_B[1..3,1..3]
+
+. matrix inv_V_b_V_B = invsym(V_bhat-V_Bhat)
+
+. matrix q1 = Bhat-bhat
+
+. matrix hausman = q1'*inv_V_b_V_B*q1
+
+. matrix list hausman
+
+symmetric hausman[1,1]
+           y1
+y1  306.08568
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, fe 
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. matrix b = e(b)'
+
+. matrix V_b = e(V)
+
+. estimates store FE
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix V_B = e(V)
+
+. estimates store RE
+
+. hausman fixed random
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     fixed        random       Difference          S.E.
+-------------+----------------------------------------------------------------
+    lincomep |    .6622498     .5549858         .107264        .0434669
+       lrpmg |   -.3217025    -.4203893        .0986868        .0186143
+    lcarpcap |   -.6404829    -.6068402       -.0336428        .0151597
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =      302.80
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+
+. 
+. * Alternatively:
+. matrix bhat = b[1..3,1..1]
+
+. matrix list bhat
+
+bhat[3,1]
+                  y1
+lincomep   .66224984
+   lrpmg   -.3217025
+lcarpcap  -.64048292
+
+. matrix V_bhat = V_b[1..3,1..3]
+
+. matrix list V_bhat
+
+symmetric V_bhat[3,3]
+           lincomep      lrpmg   lcarpcap
+lincomep  .00538551
+   lrpmg  .00028958  .00194474
+lcarpcap  -.0020491  .00008864  .00088083
+
+. matrix Bhat = B[1..3,1..1]
+
+. matrix list Bhat
+
+Bhat[3,1]
+                  y1
+lincomep   .55498584
+   lrpmg  -.42038926
+lcarpcap  -.60684015
+
+. matrix V_Bhat = V_B[1..3,1..3]
+
+. matrix list V_Bhat
+
+symmetric V_Bhat[3,3]
+            lincomep       lrpmg    lcarpcap
+lincomep   .00349614
+   lrpmg  -.00050835   .00159825
+lcarpcap  -.00138691   .00036808   .00065102
+
+. matrix inv_V_b_V_B = invsym(V_bhat-V_Bhat)
+
+. matrix list inv_V_b_V_B
+
+symmetric inv_V_b_V_B[3,3]
+            lincomep       lrpmg    lcarpcap
+lincomep   19303.575
+   lrpmg  -44454.142   105259.37
+lcarpcap           0           0           0
+
+. matrix q1 = Bhat-bhat
+
+. matrix list q1
+
+q1[3,1]
+                  y1
+lincomep  -.10726401
+   lrpmg  -.09868676
+lcarpcap   .03364277
+
+. matrix hausman = q1'*inv_V_b_V_B*q1
+
+. matrix list hausman
+
+symmetric hausman[1,1]
+           y1
+y1  306.08568
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, fe 
+
+Fixed-effects (within) regression               Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8396                                         min =         19
+     between = 0.5755                                         avg =       19.0
+     overall = 0.6150                                         max =         19
+
+                                                F(3,321)          =     560.09
+corr(u_i, Xb)  = -0.2468                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .6622498    .073386     9.02   0.000     .5178715    .8066282
+       lrpmg |  -.3217025   .0440992    -7.29   0.000    -.4084626   -.2349424
+    lcarpcap |  -.6404829   .0296788   -21.58   0.000    -.6988726   -.5820933
+       _cons |    2.40267   .2253094    10.66   0.000     1.959401     2.84594
+-------------+----------------------------------------------------------------
+     sigma_u |  .34841289
+     sigma_e |  .09233034
+         rho |  .93438173   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(17, 321) = 83.96                    Prob > F = 0.0000
+
+. matrix b = e(b)'
+
+. matrix V_b = e(V)
+
+. estimates store FE
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix V_B = e(V)
+
+. estimates store RE
+
+. hausman FE RE
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |       FE           RE         Difference          S.E.
+-------------+----------------------------------------------------------------
+    lincomep |    .6622498     .5549858         .107264        .0434669
+       lrpmg |   -.3217025    -.4203893        .0986868        .0186143
+    lcarpcap |   -.6404829    -.6068402       -.0336428        .0151597
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =      302.80
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix b = e(b)'
+
+. matrix list b
+
+b[4,1]
+                  y1
+lincomep   .55498584
+   lrpmg  -.42038926
+lcarpcap  -.60684015
+   _cons   1.9966991
+
+. matrix V_b = e(V)
+
+. matrix list V_b
+
+symmetric V_b[4,4]
+            lincomep       lrpmg    lcarpcap       _cons
+lincomep   .00349614
+   lrpmg  -.00050835   .00159825
+lcarpcap  -.00138691   .00036808   .00065102
+   _cons   .00865824   .00104319  -.00243589   .03397607
+
+. 
+. reg lgaspcar lincomep lrpmg lcarpcap
+
+      Source |       SS           df       MS      Number of obs   =       342
+-------------+----------------------------------   F(3, 338)       =    664.00
+       Model |  87.8386024         3  29.2795341   Prob > F        =    0.0000
+    Residual |  14.9043581       338  .044095734   R-squared       =    0.8549
+-------------+----------------------------------   Adj R-squared   =    0.8536
+       Total |  102.742961       341  .301299005   Root MSE        =    .20999
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .8899616   .0358058    24.86   0.000     .8195313    .9603919
+       lrpmg |  -.8917979   .0303147   -29.42   0.000    -.9514272   -.8321685
+    lcarpcap |  -.7633727   .0186083   -41.02   0.000    -.7999754   -.7267701
+       _cons |   2.391326   .1169343    20.45   0.000     2.161315    2.621336
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix list B
+
+B[4,1]
+                  y1
+lincomep   .88996164
+   lrpmg  -.89179786
+lcarpcap  -.76337273
+   _cons   2.3913257
+
+. matrix V_B = e(V)
+
+. matrix list V_B
+
+symmetric V_B[4,4]
+            lincomep       lrpmg    lcarpcap       _cons
+lincomep   .00128206
+   lrpmg  -.00086747   .00091898
+lcarpcap   -.0005587   .00045037   .00034627
+   _cons   .00236569   -.0007729  -.00006359   .01367363
+
+. 
+. matrix bhat = b[1..3,1..1]
+
+. matrix V_bhat = V_b[1..3,1..3]
+
+. matrix Bhat = B[1..3,1..1]
+
+. matrix V_Bhat = V_B[1..3,1..3]
+
+. 
+. matrix inv_V_b_V_B = invsym(V_bhat-V_Bhat)
+
+. matrix q4 = bhat-Bhat
+
+. matrix hausman = q4'*inv_V_b_V_B*q4
+
+. matrix list hausman
+
+symmetric hausman[1,1]
+           y1
+y1  495.75959
+
+. 
+end of do-file
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re 
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. matrix b = e(b)'
+
+. matrix list b
+
+b[4,1]
+                  y1
+lincomep   .55498584
+   lrpmg  -.42038926
+lcarpcap  -.60684015
+   _cons   1.9966991
+
+. matrix V_b = e(V)
+
+. matrix list V_b
+
+symmetric V_b[4,4]
+            lincomep       lrpmg    lcarpcap       _cons
+lincomep   .00349614
+   lrpmg  -.00050835   .00159825
+lcarpcap  -.00138691   .00036808   .00065102
+   _cons   .00865824   .00104319  -.00243589   .03397607
+
+. 
+. reg lgaspcar lincomep lrpmg lcarpcap
+
+      Source |       SS           df       MS      Number of obs   =       342
+-------------+----------------------------------   F(3, 338)       =    664.00
+       Model |  87.8386024         3  29.2795341   Prob > F        =    0.0000
+    Residual |  14.9043581       338  .044095734   R-squared       =    0.8549
+-------------+----------------------------------   Adj R-squared   =    0.8536
+       Total |  102.742961       341  .301299005   Root MSE        =    .20999
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .8899616   .0358058    24.86   0.000     .8195313    .9603919
+       lrpmg |  -.8917979   .0303147   -29.42   0.000    -.9514272   -.8321685
+    lcarpcap |  -.7633727   .0186083   -41.02   0.000    -.7999754   -.7267701
+       _cons |   2.391326   .1169343    20.45   0.000     2.161315    2.621336
+------------------------------------------------------------------------------
+
+. matrix B = e(b)'
+
+. matrix list B
+
+B[4,1]
+                  y1
+lincomep   .88996164
+   lrpmg  -.89179786
+lcarpcap  -.76337273
+   _cons   2.3913257
+
+. matrix V_B = e(V)
+
+. matrix list V_B
+
+symmetric V_B[4,4]
+            lincomep       lrpmg    lcarpcap       _cons
+lincomep   .00128206
+   lrpmg  -.00086747   .00091898
+lcarpcap   -.0005587   .00045037   .00034627
+   _cons   .00236569   -.0007729  -.00006359   .01367363
+
+. 
+. matrix bhat = b[1..3,1..1]
+
+. matrix list bhat
+
+bhat[3,1]
+                  y1
+lincomep   .55498584
+   lrpmg  -.42038926
+lcarpcap  -.60684015
+
+. matrix V_bhat = V_b[1..3,1..3]
+
+. matrix list V_bhat
+
+symmetric V_bhat[3,3]
+            lincomep       lrpmg    lcarpcap
+lincomep   .00349614
+   lrpmg  -.00050835   .00159825
+lcarpcap  -.00138691   .00036808   .00065102
+
+. matrix Bhat = B[1..3,1..1]
+
+. matrix list Bhat
+
+Bhat[3,1]
+                  y1
+lincomep   .88996164
+   lrpmg  -.89179786
+lcarpcap  -.76337273
+
+. matrix V_Bhat = V_B[1..3,1..3]
+
+. matrix list V_Bhat
+
+symmetric V_Bhat[3,3]
+            lincomep       lrpmg    lcarpcap
+lincomep   .00128206
+   lrpmg  -.00086747   .00091898
+lcarpcap   -.0005587   .00045037   .00034627
+
+. 
+. matrix inv_V_b_V_B = invsym(V_bhat-V_Bhat)
+
+. matrix list inv_V_b_V_B
+
+symmetric inv_V_b_V_B[3,3]
+            lincomep       lrpmg    lcarpcap
+lincomep   494.01624
+   lrpmg  -261.17916   1610.2557
+lcarpcap           0           0           0
+
+. matrix q = bhat-Bhat
+
+. matrix list q
+
+q[3,1]
+                 y1
+lincomep  -.3349758
+   lrpmg  .47140859
+lcarpcap  .15653257
+
+. matrix hausman = q'*inv_V_b_V_B*q
+
+. matrix list hausman
+
+symmetric hausman[1,1]
+           y1
+y1  495.75959
+
+. 
+end of do-file
+
+. help xtoverid
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. xtoverid
+command xtoverid is unrecognized
+r(199);
+
+end of do-file
+
+r(199);
+
+. ssc install xtoverid
+checking xtoverid consistency and verifying not already installed...
+installing into c:\ado\plus\...
+installation complete.
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. * a) Likelihood Ratio Test: RE vs FE 
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. xtoverid
+Error - must have ivreg2/ivreg29/ivreg28 version 2.1.15 or greater installed
+r(601);
+
+end of do-file
+
+r(601);
+
+. scc install ivreg@
+command scc is unrecognized
+r(199);
+
+. ssc install ivreg2
+checking ivreg2 consistency and verifying not already installed...
+installing into c:\ado\plus\...
+installation complete.
+
+. do "C:\Users\cliu\AppData\Local\Temp\STD2d88c_000000.tmp"
+
+. * a) Likelihood Ratio Test: RE vs FE 
+. xtreg lgaspcar lincomep lrpmg lcarpcap, re
+
+Random-effects GLS regression                   Number of obs     =        342
+Group variable: ncountry                        Number of groups  =         18
+
+R-sq:                                           Obs per group:
+     within  = 0.8363                                         min =         19
+     between = 0.7099                                         avg =       19.0
+     overall = 0.7309                                         max =         19
+
+                                                Wald chi2(3)      =    1642.20
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+    lgaspcar |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    lincomep |   .5549858   .0591282     9.39   0.000     .4390967    .6708749
+       lrpmg |  -.4203893   .0399781   -10.52   0.000     -.498745   -.3420336
+    lcarpcap |  -.6068402    .025515   -23.78   0.000    -.6568487   -.5568316
+       _cons |   1.996699    .184326    10.83   0.000     1.635427    2.357971
+-------------+----------------------------------------------------------------
+     sigma_u |  .19554468
+     sigma_e |  .09233034
+         rho |  .81769856   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. xtoverid
+
+Test of overidentifying restrictions: fixed vs random effects
+Cross-section time-series model: xtreg re   
+Sargan-Hansen statistic  26.495  Chi-sq(3)    P-value = 0.0000
+
+. 
+. * b) Arellano (1993) Test: RE vs FE 
+. foreach x in lgaspcar lincomep lrpmg lcarpcap {
+  2. bysort ncountry: egen `x'_sum = sum(`x')
+  3. bysort ncountry: egen `x'_bar = mean(`x')
+  4. bysort ncountry: gen `x'_sumbackward = sum(`x')
+  5. bysort ncountry: gen `x'_sumforward = `x'_sum-`x'_sumbackward
+  6. bysort ncountry: gen `x'_plus = (((_N-_n)/(_N-_n+1))^.5)*(`x'-`x'_sumforward/(_N-_n))
+  7. bysort ncountry: replace `x'_plus = `x'_bar if _n==_N
+  8. gen `x'_add = 0
+  9. bysort ncountry: replace `x'_add = `x'_bar if _n==_N
+ 10. }
+(18 missing values generated)
+(18 real changes made)
+(18 real changes made)
+(18 missing values generated)
+(18 real changes made)
+(18 real changes made)
+(18 missing values generated)
+(18 real changes made)
+(18 real changes made)
+(18 missing values generated)
+(18 real changes made)
+(18 real changes made)
+
+. reg lgaspcar_plus lincomep_plus lrpmg_plus lcarpcap_plus lincomep_add lrpmg_add lcarpcap_add, vce(robust)
+
+Linear regression                               Number of obs     =        342
+                                                F(6, 335)         =    1859.57
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.9870
+                                                Root MSE          =     .11046
+
+-------------------------------------------------------------------------------
+              |               Robust
+lgaspcar_plus |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+lincomep_plus |   .5334155   .0762501     7.00   0.000     .3834262    .6834048
+   lrpmg_plus |  -.3244005   .0490645    -6.61   0.000    -.4209139   -.2278872
+lcarpcap_plus |  -.6252152   .0382488   -16.35   0.000    -.7004532   -.5499771
+ lincomep_add |   .0238777   .2825049     0.08   0.933    -.5318293    .5795848
+    lrpmg_add |  -.5007424   .2803103    -1.79   0.075    -1.052132    .0506476
+ lcarpcap_add |  -.1814225   .1803237    -1.01   0.315     -.536132    .1732869
+        _cons |  -.0272894   .0088619    -3.08   0.002    -.0447214   -.0098575
+-------------------------------------------------------------------------------
+
+. matrix b = e(b)'
+
+. matrix V = e(V)
+
+. matrix bhat = b[4..6,1..1]
+
+. matrix Vhat = V[4..6,4..6]
+
+. mata: I_N = I(3)
+
+. mata: st_matrix("r(I_N)",I_N)
+
+. matrix R = r(I_N)
+
+. matrix q = J(3,1,0)
+
+. matrix mhat = R*bhat-q
+
+. matrix covmatrixm = R*Vhat*R'
+
+. local J = 3
+
+. matrix F = mhat'*invsym(covmatrixm)*mhat/`J'
+
+. matrix list F
+
+symmetric F[1,1]
+           c1
+c1  7.4820421
+
+. 
+end of do-file
+
+. exit, clear
