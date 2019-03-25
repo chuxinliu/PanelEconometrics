@@ -287,8 +287,6 @@ matrix list hausman
 ********************************************************************************
 * Question 3
 * a) Likelihood Ratio Test: RE vs FE 
-xtreg lgaspcar lincomep lrpmg lcarpcap, re
-xtoverid
 
 * b) Arellano (1993) Test: RE vs FE 
 foreach x in lgaspcar lincomep lrpmg lcarpcap {
