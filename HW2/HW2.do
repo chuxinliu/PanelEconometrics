@@ -1,17 +1,16 @@
-** Panel Econometrics       **
-** Assignment 2             **
-** Author: Chuxin Liu       **
-** Last Updated: 03/13/2019 **
+**  Panel Econometrics        **
+**  Assignment 2              **
+**  Author: Chuxin Liu        **
+**  Last Updated: 03/13/2019  **
 
 clear
 set more off
 capture: log close
-cd "C:\Users\cliu\Documents\GitHub\PanelEconometrics\HW2"
+cd "C:\Users\cliu3\Documents\GitHub\PanelEconometrics\HW2"
 log using "HW2_log", text replace
 use "gasoline.dta", clear
 
-
-******************************** Data Cleaning *********************************
+******************************* Data Cleaning *********************************
 encode country, generate(ncountry)
 tsset ncountry year
 gen iota = 1
@@ -20,7 +19,7 @@ gen iota = 1
 * Question 1
 * (a) FE, country effects
 xtreg lgaspcar lincomep lrpmg lcarpcap, fe
-reg lgaspcar lincomep lrpmg lcarpcap  i.ncountry
+reg lgaspcar lincomep lrpmg lcarpcap i.ncountry
 
 matrix b = e(b)'
 matrix list b
@@ -240,7 +239,6 @@ local X_m = r(X_m)
 display "GHM test of sigma^2_mu=0 & sigma^2_lambda=0: `HO'"
 
 
-
 ********************************************************************************
 * Question 2 
 * a) Hausman Test: RE vs FE (1st version of Hausman Test)
@@ -287,6 +285,11 @@ matrix list hausman
 ********************************************************************************
 * Question 3
 * a) Likelihood Ratio Test: RE vs FE 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2f84df89e6cfcef072c00af00d28bc3d8d813ea5
 
 * b) Arellano (1993) Test: RE vs FE 
 foreach x in lgaspcar lincomep lrpmg lcarpcap {
@@ -300,16 +303,29 @@ gen `x'_add = 0
 bysort ncountry: replace `x'_add = `x'_bar if _n==_N
 }
 reg lgaspcar_plus lincomep_plus lrpmg_plus lcarpcap_plus lincomep_add lrpmg_add lcarpcap_add, vce(robust)
+
 matrix b = e(b)'
+matrix list b
 matrix V = e(V)
+matrix list V
 matrix bhat = b[4..6,1..1]
+matrix list bhat
 matrix Vhat = V[4..6,4..6]
+matrix list Vhat
+
 mata: I_N = I(3)
 mata: st_matrix("r(I_N)",I_N)
+
 matrix R = r(I_N)
+matrix list R
 matrix q = J(3,1,0)
+matrix list q
 matrix mhat = R*bhat-q
+matrix list mhat
 matrix covmatrixm = R*Vhat*R'
+matrix list covmatrixm
+
 local J = 3
+
 matrix F = mhat'*invsym(covmatrixm)*mhat/`J'
 matrix list F
