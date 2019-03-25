@@ -1,0 +1,6 @@
+Correlation Table,,,,
+,mu_i,lincomep,lrpmg,lcarpcap
+mu_i,1,,,
+lincomep,-0.2882,1,,
+lrpmg,-0.8133,0.4636,1,
+lcarpcap,0.2706,0.4801,-0.4039,1
