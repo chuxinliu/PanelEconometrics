@@ -7,7 +7,7 @@ clear
 set more off
 capture: log close
 cd "C:\Users\cliu\Documents\GitHub\PanelEconometrics\HW1"
-use "gasoline.dta", clear
+use "car.dta", clear
 
 *******************************************************************************
 * Question 1
@@ -40,7 +40,7 @@ eststo Swar: spregxt lgaspcar lincomep lrpmg lcarpcap, nc(18) model(ols) run(xts
 /* run(xtmlem): [NEW] Trevor Breusch MLE Random-Effects Panel Regression */
 eststo IMLE: spregxt lgaspcar lincomep lrpmg lcarpcap, nc(18) model(ols) run(xtmlem)
 
-esttab using Table1.csv, label se noobs nocons title(Replicating Table 2.5) mtitles("OLS" "Between" "Within" "WALHUS" "AMEMIYA" "SWAR" "IMLE") replace 
+esttab using Table1.csv, label se noobs nocons title(Replicating Table 2.5) mtitles("OLS" "Between" "Within" "WALHUS" "AMEMIYA" "SWAR" "IMLE") replace
 
 * Question 2
 tsset ncountry year
@@ -53,4 +53,3 @@ twoway (lfit mu_i lincomep) (scatter mu_i lincomep, mlabel(ncountry) mlabsize(vs
 graph export Figure1.png, replace
 *(c)
 corr mu_i lincomep lrpmg lcarpcap
-
