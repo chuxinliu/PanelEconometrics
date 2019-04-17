@@ -7,7 +7,7 @@ clear
 set more off
 capture: log close
 cd "C:\Users\cliu\Documents\GitHub\PanelEconometrics\HW1"
-use "car.dta", clear
+use "gasoline.dta", clear
 
 *******************************************************************************
 * Question 1
