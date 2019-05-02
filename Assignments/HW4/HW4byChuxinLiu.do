@@ -8,9 +8,8 @@ clear
 clear
 capture log close
 
-global root="/Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW4"
-global root="/Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW4"
-use "$root/wages.dta", clear
+global root="C:\Users\chuxi\Documents\GitHub\PanelEconometrics\Assignments\HW4"
+use "$root\wages.dta", clear
 
 ********************************************************************************
 
@@ -61,7 +60,7 @@ est store within
 eststo ht: xthtaylor lwage wks south smsa ms exp exp2 occ ind union fem blk ed, ///
 	endog(exp exp2 wks ms union ed)
 * Hausman test: within and Hausman-Taylor
-hausman within ht
+hausman within ht, df(3)
 local hausman_chi2_df=r(df)
 local hausman_chi2=round(r(chi2),.01)
 estadd local Hausman "chi2(`hausman_chi2_df')=`hausman_chi2'"
@@ -71,7 +70,7 @@ est store ht
 eststo am: xthtaylor lwage wks south smsa ms exp exp2 occ ind union fem blk ed, ///
 	endog(exp exp2 wks ms union ed) amacurdy
 * Hausman test: Hausman-Taylor and AM
-hausman ht am
+hausman ht am, df(13)
 local hausman_chi2_df=r(df)
 local hausman_chi2=round(r(chi2),.01)
 estadd local Hausman "chi2(`hausman_chi2_df')=`hausman_chi2'"
@@ -85,8 +84,6 @@ esttab gls within ht am using $root\Table2.rtf, replace se noobs compress nogaps
 
 * Question 4
 
-hausman within gls
-hausman within ht
-hausman gls ht
-hausman ht am
+hausman within am, df(27)
+hausman gls am
 
