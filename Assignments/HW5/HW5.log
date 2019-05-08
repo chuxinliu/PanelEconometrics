@@ -2,13 +2,12 @@
       name:  <unnamed>
        log:  C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\HW5.log
   log type:  text
- opened on:   8 May 2019, 16:22:57
+ opened on:   8 May 2019, 16:30:30
 
 . use "$root\Cigar.dta", clear
 
 . 
-. ********************************************************************************
-. sort state yr 
+. sort state yr
 
 . xtset state yr
        panel variable:  state (strongly balanced)
@@ -16,12 +15,13 @@
                 delta:  1 unit
 
 . 
+. ********************************************************************************
 . *Question 1
 . *Variables in the regressions are in real term: adjusted for inflation using CPI
 . 
 . g c=sales*100/cpi
 
-. sort state yr 
+. sort state yr
 
 . by state: gen clag = c[_n-1]
 (46 missing values generated)
@@ -70,19 +70,9 @@
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table1.rtf)
 
 . 
-. ssc install sutex
-checking sutex consistency and verifying not already installed...
-all files already exist and are up to date.
-
-. *help sutex
-. sutex price pop pop16 cpi ndi sales pimin lnc lnclag lnp lny lnpn, minmax ///
->         file("$root\Table1.tex") replace
-file C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table1.tex saved
-
-. 
-. 
+. ********************************************************************************
 . *Question 2
-. *(1) OLS 
+. *(1) OLS
 . eststo clear
 
 . eststo OLS: reg lnc lnclag lnp lny lnpn
@@ -104,7 +94,6 @@ file C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table1.t
        _cons |    .065667   .0812072     0.81   0.419    -.0936412    .2249752
 ------------------------------------------------------------------------------
 
-. 
 . *(2) Within
 . tab yr, g(yrd)
 
@@ -203,8 +192,7 @@ corr(u_i, Xb)  = 0.1667                         Prob > F          =     0.0000
 ------------------------------------------------------------------------------
 F test that all u_i=0: F(45, 1256) = 4.52                    Prob > F = 0.0000
 
-. 
-. *(3) 2SLS 
+. *(3) 2SLS
 . eststo TSLS: xtivreg lnc lnp lny lnpn (lnclag = L.lnp L.lny L.lnpn)
 
 G2SLS random-effects IV regression              Number of obs     =      1,334
@@ -235,7 +223,6 @@ Instrumented:   lnclag
 Instruments:    lnp lny lnpn L.lnp L.lny L.lnpn
 ------------------------------------------------------------------------------
 
-. 
 . *(4) 2SLS-KR
 . ssc install xtkr
 checking xtkr consistency and verifying not already installed...
@@ -258,7 +245,6 @@ Number of Obs: 1288                 Number of Panel Units: 46
 Instruments: constant LD.lnc D.lnp LD.lnp D.lny LD.lny D.lnpn LD.lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11 yr
 > d12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30
 
-. 
 . *(5) Within-2SLS
 . eststo Within2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), fe
 note: yrd1 omitted because of collinearity
@@ -327,7 +313,6 @@ Instruments:    lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
                 L.lny L.lnpn
 ------------------------------------------------------------------------------
 
-. 
 . *(6) FD-2SLS
 . eststo FD2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), fd
 note: yrd1 omitted because of collinearity
@@ -463,7 +448,6 @@ Instruments:    lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
                 L.lny L.lnpn
 ------------------------------------------------------------------------------
 
-. 
 . *(7) FD-2SLS-KR
 . eststo FD2SLSKR: xtkr d.lnc (d.l.lnc d.lnp d.lny d.lnpn = l2.lnc l(1/2).lnp l(1/2).lny l(1/2).lnpn yrd*)
 
@@ -490,13 +474,12 @@ Number of Obs: 1288                 Number of Panel Units: 46
 Instruments: constant L2.lnc L.lnp L2.lnp L.lny L2.lny L.lnpn L2.lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11 yr
 > d12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30
 
-. 
 . *(8) GMM-1-Step
 . ssc install xtabond2
 checking xtabond2 consistency and verifying not already installed...
 all files already exist and are up to date.
 
-. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust 
+. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -572,9 +555,8 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
     Difference (null H = exogenous): chi2(31)   =   4.26  Prob > chi2 =  1.000
 
 
-. 
 . *(9) GMM-2-Step
-. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep 
+. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -654,7 +636,7 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 . 
 . esttab OLS Within TSLS TSLSKR Within2SLS ///
 >         using $root\Table21.rtf, replace se noobs compress nogaps label ///
->         mtitle("OLS" "Within" "TSLS" "TSLSKR" "Within2SLS") ///
+>         mtitle("OLS" "Within" "2SLS" "2SLS-KR" "Within-2SLS") ///
 >         title(Table 2.1: Replication of Table 8.1 (1)) ///
 >         keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes ///
 > 
@@ -662,16 +644,16 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 
 . esttab FD2SLS FD2SLSKR GMM1Step GMM2Step ///
 >         using $root\Table22.rtf, replace se noobs compress nogaps label ///
->         mtitle("FD2SLS" "FD2SLSKR" "GMM1Step" "GMM2Step") ///
+>         mtitle("FD-2SLS" "FD-2SLS-KR" "GMM-1-Step" "GMM-2-Step") ///
 >         title(Table 2.2: Replication of Table 8.1 (2)) ///
 >         order(lnclag lnp lny lnpn D.lnclag LD.lnc D.lnp D.lny D.lnpn) nonotes ///
 >         keep(lnclag lnp lny lnpn D.lnclag LD.lnc D.lnp D.lny D.lnpn)
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table22.rtf)
 
-.         
-.         
+. 
+. ********************************************************************************
 . *Question 3: OLS vs. xtabond2
-. *OLS 
+. *OLS
 . eststo clear
 
 . eststo OLS: reg lnc lnclag lnp lny lnpn yrd*
@@ -726,7 +708,7 @@ note: yrd30 omitted because of collinearity
 ------------------------------------------------------------------------------
 
 . *GMM-1-Step
-. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust 
+. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -803,7 +785,7 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 
 
 . *GMM-2-Step
-. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep 
+. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -882,14 +864,12 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 
 . esttab OLS GMM1Step GMM2Step ///
 >         using $root\Table3.rtf, replace se noobs compress nogaps label ///
->         mtitle("OLS" "GMM1Step" "GMM2Step") ///
->         title(Table 3: OLS vs. xtabond2) ///
->         order(lnclag lnp lny lnpn) nonotes ///
->         keep(lnclag lnp lny lnpn)
+>         mtitle("OLS" "GMM1Step" "GMM2Step") title(Table 3: OLS vs. xtabond2) ///
+>         keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table3.rtf)
 
 . 
-. 
+. ********************************************************************************
 . *Question 4: FE vs. RE
 . *FE
 . eststo FE: xtreg lnc lnclag lnp lny lnpn yrd*, fe
@@ -1013,13 +993,12 @@ corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
 
 . esttab FE RE ///
 >         using $root\Table4.rtf, replace se noobs compress nogaps label ///
->         mtitle("FE" "RE") ///
->         title(Table 4: FE vs. RE) ///
->         order(lnclag lnp lny lnpn) nonotes ///
->         keep(lnclag lnp lny lnpn)
+>         mtitle("FE" "RE") title(Table 4: FE vs. RE) ///
+>         keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table4.rtf)
 
 . 
+. ********************************************************************************
 . *Question 5: 2SLS (ivregress), FE-2SLS and RE-2SLS (xtivreg) vs. Q3 and Q4
 . *2SLS (ivregress)
 . eststo TSLS: ivregress 2sls lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn)
@@ -1215,12 +1194,11 @@ Instruments:    lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
 >         using $root\Table5.rtf, replace se noobs compress nogaps label ///
 >         mtitle("2SLS" "FE-2SLS" "RE-2SLS") ///
 >         title(Table 5: 2SLS (ivregress), FE-2SLS and RE-2SLS (xtivreg)) ///
->         order(lnclag lnp lny lnpn) nonotes ///
->         keep(lnclag lnp lny lnpn)
+>         keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table5.rtf)
 
 . 
-. 
+. ********************************************************************************
 . *Question 6: xtdpdsys vs. xtabond, comparing to FE and RE?
 . * Part 6.
 . eststo xtdpdsys: xtdpdsys lnc lnp lny lnpn yrd*, lags(1) twostep vce(robust)
@@ -1294,12 +1272,11 @@ Instruments for level equation
 >         using $root\Table6.rtf, replace se noobs compress nogaps label ///
 >         mtitle("xtdpdsys" "GMM-1-Step" "GMM-2-Step" "FE" "RE") ///
 >         title(Table 6: xtdpdsys vs. xtabond, comparing to FE and RE) ///
->         order(lnclag L.lnc lnp lny lnpn) nonotes ///
->         keep(lnclag L.lnc lnp lny lnpn)
+>         keep(lnclag L.lnc lnp lny lnpn) order(lnclag L.lnc lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table6.rtf)
 
 . 
-. 
+. ********************************************************************************
 . *Question 7: use xtdpd to replicate xtabond
 . eststo xtdpd: xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnc) div(lnp lny lnpn yrd*) twostep vce(robust)
 note: yrd1 dropped from div() because of collinearity
@@ -1370,13 +1347,12 @@ Instruments for level equation
 
 . esttab xtdpd GMM2Step ///
 >         using $root\Table7.rtf, replace se noobs compress nogaps label ///
->         mtitle("xtdpd" "GMM2Step") ///
->         title(Table 7: Use xtdpd to replicate xtabond) ///
->         order(lnclag L.lnc lnp lny lnpn) nonotes ///
->         keep(lnclag L.lnc lnp lny lnpn)
+>         mtitle("xtdpd" "GMM2Step") title(Table 7: Use xtdpd to replicate xtabond) ///
+>         keep(lnclag L.lnc lnp lny lnpn) order(lnclag L.lnc lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table7.rtf)
 
 . 
+. ********************************************************************************
 . *Question 8: dgmmiv(lnp lny lnpn, lag(1.)) and dgmmiv(lnp lny lnpn, lag(1.1))
 . eststo ABOption1: xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnp lny lnpn,lag(1 .)) div(yrd*) twostep vce(robust)
 note: yrd1 dropped from div() because of collinearity
@@ -1515,11 +1491,11 @@ Instruments for level equation
 >         using $root\Table8.rtf, replace se noobs compress nogaps label ///
 >         mtitle("AB-Option1" "AB-Option2") ///
 >         title(Table 8: dgmmiv(lnp lny lnpn,lag(1 .)) and dgmmiv(lnp lny lnpn,lag(1 1))) ///
->         order(L.lnc lnp lny lnpn) nonotes ///
->         keep(L.lnc lnp lny lnpn)
+>         keep(L.lnc lnp lny lnpn) order(L.lnc lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table8.rtf)
 
 . 
+. ********************************************************************************
 . *Question 9: lgmmiv(lnc) and lgmmiv(lnc lnp lny lnpn)
 . eststo ABOption3:  xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnc lnp lny lnpn,lag(1 .)) div(yrd*) twostep vce(robust)
 note: yrd1 dropped from div() because of collinearity
@@ -1657,12 +1633,10 @@ Instruments for level equation
 >         using $root\Table9.rtf, replace se noobs compress nogaps label ///
 >         mtitle("AB-Option3" "AB-Option4") ///
 >         title(Table 9: lgmmiv(lnc) and lgmmiv(lnc lnp lny lnpn)) ///
->         order(L.lnc lnp lny lnpn) nonotes ///
->         keep(L.lnc lnp lny lnpn)
-(note: file C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table9.rtf not found)
+>         keep(L.lnc lnp lny lnpn) order(L.lnc lnp lny lnpn) nonotes
 (output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table9.rtf)
 
 . 
-. 
 end of do-file
 
+. exit, clear
