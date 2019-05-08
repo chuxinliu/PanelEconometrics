@@ -1,44 +1,46 @@
 // Panel Econometrics     //
 // Assignment #5          //
 // Author: Chuxin Liu     //
-// Last Updated: 05042019 //
+// Last Updated: 05082019 //
 
 set more off
 clear
 capture log close
 
-global root="/Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW5"
-log using "$root/HW5.log",replace
-use "$root/Cigar.dta", clear
+global root="C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5"
+log using "$root\HW5.log",replace
+use "$root\Cigar.dta", clear
 
 ********************************************************************************
-
+sort state yr 
 xtset state yr
 
 *Question 1
+*Variables in the regressions are in real term: adjusted for inflation using CPI
 
+g c=sales*100/cpi
 sort state yr 
-by state: gen clag = sales[_n-1]
-
-g lnc=ln(sales)
+by state: gen clag = c[_n-1]
+g lnc=ln(c)
 g lnclag=ln(clag)
-
-g lnp=ln(price*100/cpi)
-g lny=ln(ndi*100/cpi)
-g lnpn=ln(pimin*100/cpi)
-
+g y=ndi*100/cpi
+g lny=ln(y)
+g p=price*100/cpi
+g lnp=ln(p)
+g pn=pimin*100/cpi
+g lnpn=ln(pn)
 
 eststo clear
-eststo summstats: estpost summarize price pop pop16 cpi ndi ///
-	sales lnc clag lnclag lnp lny pimin lnpn
-esttab summstats using $root/Table1.rtf, replace main(mean %6.2f) aux(sd) ///
-	cell("mean sd") nomtitles title(Table 1: Summary Statistics)
+eststo sumstats: estpost summarize price pop pop16 cpi ndi sales pimin ///
+	lnc lnclag lnp lny lnpn
+esttab sumstats using $root\Table1.rtf, replace main(mean %6.2f) aux(sd) ///
+	cell("mean sd") nomtitles title(Table 1: Summary Statistics) ///
+	addnotes("Created variables: lnc lnclag lnp lny lnpn")
 
 ssc install sutex
-sutex price pop pop16 cpi ndi sales lnc clag lnclag lnp lny pimin lnpn, minmax ///
-	file("$root/Table1.tex") replace
-
-
+*help sutex
+sutex price pop pop16 cpi ndi sales pimin lnc lnclag lnp lny lnpn, minmax ///
+	file("$root\Table1.tex") replace
 
 
 *Question 2
@@ -47,33 +49,41 @@ eststo clear
 eststo OLS: reg lnc lnclag lnp lny lnpn
 
 *(2) Within
-eststo Within: xtreg lnc lnclag lnp lny lnpn, fe
+tab yr, g(yrd)
+eststo Within: xtreg lnc lnclag lnp lny lnpn yrd*, fe
 
 *(3) 2SLS 
-eststo 2SLS: lnc lnp lny lnpn (lnclag = L.lnp L.lny L.lnpn)
+eststo TSLS: xtivreg lnc lnp lny lnpn (lnclag = L.lnp L.lny L.lnpn)
 
 *(4) 2SLS-KR
-eststo : xtkr lnc (L.lnc lnpc lny lnpn = d.l.lnc d.l(0/1).lnpc d.l(0/1).lny d.l(0/1).lnpn y3-y29)
+ssc install xtkr
+eststo TSLSKR: xtkr lnc (lnclag lnp lny lnpn = d.l.lnc d.l(0/1).lnp d.l(0/1).lny d.l(0/1).lnpn yrd*)
 
-*(5) FE-2SLS
-eststo : xtivreg lnc lnpc lny lnpn y3-y29 (lnclag = L.lnpc L.lny L.lnpn), fe
+*(5) Within-2SLS
+eststo Within2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), fe
 
 *(6) FD-2SLS
-eststo : xtivreg lnc lnpc lny lnpn y3-y29 (lnclag = L.lnpc L.lny L.lnpn), fd
+eststo FD2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), fd
 
 *(7) FD-2SLS-KR
-eststo : xtkr d.lnc (d.l.lnc d.lnpc d.lny d.lnpn = l2.lnc l(1/2).lnpc l(1/2).lny l(1/2).lnpn y3-y29)
+eststo FD2SLSKR: xtkr d.lnc (d.l.lnc d.lnp d.lny d.lnpn = l2.lnc l(1/2).lnp l(1/2).lny l(1/2).lnpn yrd*)
 
-*(8) AB-1-STEP
-eststo : xtabond2 lnc l.lnc lnpc lny lnpn y3-y29 , gmm(l.lnc) iv(lnpc lny lnpn y3-y29) noleveleq robust 
+*(8) GMM-1-Step
+ssc install xtabond2
+eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(l.lnc) iv(lnp lny lnpn yrd*) noleveleq robust 
 
-*(9) AB-2-STEP
-eststo : xtabond2 lnc l.lnc lnpc lny lnpn y3-y29 , gmm(l.lnc) iv(lnpc lny lnpn y3-y29) noleveleq twostep 
+*(9) GMM-2-Step
+eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(l.lnc) iv(lnp lny lnpn yrd*) noleveleq twostep 
+
+esttab OLS Within TSLS TSLSKR Within2SLS FD2SLS FD2SLSKR GMM1Step GMM2Step ///
+	using $root\Table2.rtf, replace se noobs compress nogaps label ///
+	mtitle("OLS" "Within" "TSLS" "TSLSKR" "Within2SLS" "FD2SLS" "FD2SLSKR" "GMM1Step" "GMM2Step") ///
+	title(Table 2: Replication of Table 8.1) ///
+	keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes ///
 
 
 
-
-* Part 3.
+/* Part 3.
 
 qui: reg lnc lnclag lnpc lny lnpn
 matrix b1 = e(b)
