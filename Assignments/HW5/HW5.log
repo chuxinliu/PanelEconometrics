@@ -139,3 +139,10 @@ F test that all u_i=0: F(45, 1284) = 2.03                    Prob > F = 0.0001
 . 
 end of do-file
 
+. exit
+no; data in memory would be lost
+r(4);
+
+. clear
+
+. exit
