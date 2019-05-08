@@ -1,0 +1,141 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW5/HW
+> 5.log
+  log type:  text
+ opened on:   8 May 2019, 11:57:58
+
+. use "$root/Cigar.dta", clear
+
+. 
+. *****************************************************************************
+> ***
+. 
+. xtset state yr
+       panel variable:  state (strongly balanced)
+        time variable:  yr, 63 to 92
+                delta:  1 unit
+
+. 
+. *Question 1
+. 
+. sort state yr 
+
+. by state: gen clag = sales[_n-1]
+(46 missing values generated)
+
+. 
+. g lnc=ln(sales)
+
+. g lnclag=ln(clag)
+(46 missing values generated)
+
+. 
+. g lnp=ln(price*100/cpi)
+
+. g lny=ln(ndi*100/cpi)
+
+. g lnpn=ln(pimin*100/cpi)
+
+. 
+. 
+. eststo clear
+
+. eststo summstats: estpost summarize price pop pop16 cpi ndi ///
+>         sales lnc clag lnclag lnp lny pimin lnpn
+
+             |  e(count)   e(sum_w)    e(mean)     e(Var)      e(sd) 
+-------------+-------------------------------------------------------
+       price |      1380       1380   68.69993   1762.846   41.98626 
+         pop |      1380       1380   4537.113   2.33e+07   4828.836 
+       pop16 |      1380       1380   3366.616   1.33e+07   3641.847 
+         cpi |      1380       1380   73.59667   1334.392   36.52933 
+         ndi |      1380       1380   7525.023   2.25e+07   4747.859 
+       sales |      1380       1380   123.9509    960.445   30.99105 
+         lnc |      1380       1380   4.793396   .0504448   .2245991 
+        clag |      1334       1334    124.787   957.8099    30.9485 
+      lnclag |      1334       1334   4.800715   .0491236   .2216384 
+         lnp |      1380       1380   4.498752   .0230363   .1517772 
+         lny |      1380       1380   9.150421    .044078   .2099476 
+       pimin |      1380       1380   62.89928   1468.662   38.32313 
+        lnpn |      1380       1380   4.410703   .0228418   .1511349 
+
+             |    e(min)     e(max)     e(sum) 
+-------------+---------------------------------
+       price |      23.4      201.9    94805.9 
+         pop |       319    30703.3    6261216 
+       pop16 |     215.2      22920    4645930 
+         cpi |      30.6      140.3   101563.4 
+         ndi |  1322.573      23074   1.04e+07 
+       sales |      53.4      297.9   171052.2 
+         lnc |  3.977811   5.696758   6614.887 
+        clag |      53.4      297.9   166465.9 
+      lnclag |  3.977811   5.696758   6404.154 
+         lnp |  3.995361    4.96916   6208.277 
+         lny |  8.371505    9.72215   12627.58 
+       pimin |      23.4      178.5      86801 
+        lnpn |  3.995361   4.845976    6086.77 
+
+. esttab summstats using $root/Table1.rtf, replace main(mean %6.2f) aux(sd) ///
+>         cell("mean sd") nomtitles title(Table 1: Summary Statistics)
+(output written to /Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/
+> HW5/Table1.rtf)
+
+. 
+. ssc install sutex
+checking sutex consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. sutex price pop pop16 cpi ndi sales lnc clag lnclag lnp lny pimin lnpn, minma
+> x file("$root/Table1.tex") replace
+(note: file /Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW5/Tab
+> le1.tex not found)
+file /Users/cliu4/Documents/GitHub/PanelEconometrics/Assignments/HW5/Table1.tex
+>  saved
+
+. 
+end of do-file
+
+. do "/var/folders/yb/4kwv8pns21d2zdcpwvmgf6v5sckbld/T//SD08475.000000"
+
+. xtreg lnc lnclag lnp lny lnpn y3-y29, fe
+variable y3 not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/yb/4kwv8pns21d2zdcpwvmgf6v5sckbld/T//SD08475.000000"
+
+. eststo Within: xtreg lnc lnclag lnp lny lnpn, fe
+
+Fixed-effects (within) regression               Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+
+R-sq:                                           Obs per group:
+     within  = 0.8993                                         min =         29
+     between = 0.9963                                         avg =       29.0
+     overall = 0.9629                                         max =         29
+
+                                                F(4,1284)         =    2865.95
+corr(u_i, Xb)  = 0.6904                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |    .878889   .0132688    66.24   0.000     .8528581    .9049199
+         lnp |  -.1739879   .0220036    -7.91   0.000    -.2171548    -.130821
+         lny |  -.0358651   .0084922    -4.22   0.000    -.0525253    -.019205
+        lnpn |   .0473236   .0203675     2.32   0.020     .0073664    .0872808
+       _cons |   1.475951    .124779    11.83   0.000     1.231158    1.720744
+-------------+----------------------------------------------------------------
+     sigma_u |  .02161794
+     sigma_e |  .04108086
+         rho |  .21686374   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(45, 1284) = 2.03                    Prob > F = 0.0001
+
+. 
+end of do-file
+
