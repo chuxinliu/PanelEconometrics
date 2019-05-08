@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\HW5.log
   log type:  text
- opened on:   8 May 2019, 14:56:18
+ opened on:   8 May 2019, 16:22:57
 
 . use "$root\Cigar.dta", clear
 
@@ -496,7 +496,7 @@ Instruments: constant L2.lnc L.lnp L2.lnp L.lny L2.lny L.lnpn L2.lnpn yrd1 yrd2 
 checking xtabond2 consistency and verifying not already installed...
 all files already exist and are up to date.
 
-. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(l.lnc) iv(lnp lny lnpn yrd*) noleveleq robust 
+. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust 
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -555,7 +555,7 @@ Instruments for first differences equation
     yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23
     yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
   GMM-type (missing=0, separate instruments for each period unless collapsed)
-    L(1/29).L.lnc
+    L(1/29).lnclag
 ------------------------------------------------------------------------------
 Arellano-Bond test for AR(1) in first differences: z =  -5.08  Pr > z =  0.000
 Arellano-Bond test for AR(2) in first differences: z =   2.14  Pr > z =  0.032
@@ -574,7 +574,7 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 
 . 
 . *(9) GMM-2-Step
-. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(l.lnc) iv(lnp lny lnpn yrd*) noleveleq twostep 
+. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep 
 Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
 Warning: Number of instruments may be large relative to number of observations.
 Warning: Two-step estimated covariance matrix of moments is singular.
@@ -634,7 +634,7 @@ Instruments for first differences equation
     yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23
     yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
   GMM-type (missing=0, separate instruments for each period unless collapsed)
-    L(1/29).L.lnc
+    L(1/29).lnclag
 ------------------------------------------------------------------------------
 Arellano-Bond test for AR(1) in first differences: z =  -4.44  Pr > z =  0.000
 Arellano-Bond test for AR(2) in first differences: z =   1.82  Pr > z =  0.068
@@ -652,18 +652,1017 @@ Difference-in-Hansen tests of exogeneity of instrument subsets:
 
 
 . 
-. esttab OLS Within TSLS TSLSKR Within2SLS FD2SLS FD2SLSKR GMM1Step GMM2Step ///
->         using $root\Table2.rtf, replace se noobs compress nogaps label ///
->         mtitle("OLS" "Within" "TSLS" "TSLSKR" "Within2SLS" "FD2SLS" "FD2SLSKR" "GMM1Step" "GMM2Step") ///
->         title(Table 2: Replication of Table 8.1) ///
+. esttab OLS Within TSLS TSLSKR Within2SLS ///
+>         using $root\Table21.rtf, replace se noobs compress nogaps label ///
+>         mtitle("OLS" "Within" "TSLS" "TSLSKR" "Within2SLS") ///
+>         title(Table 2.1: Replication of Table 8.1 (1)) ///
 >         keep(lnclag lnp lny lnpn) order(lnclag lnp lny lnpn) nonotes ///
 > 
-file C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table2.rtf is read-only; cannot be modified or erased
-r(608);
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table21.rtf)
 
+. esttab FD2SLS FD2SLSKR GMM1Step GMM2Step ///
+>         using $root\Table22.rtf, replace se noobs compress nogaps label ///
+>         mtitle("FD2SLS" "FD2SLSKR" "GMM1Step" "GMM2Step") ///
+>         title(Table 2.2: Replication of Table 8.1 (2)) ///
+>         order(lnclag lnp lny lnpn D.lnclag LD.lnc D.lnp D.lny D.lnpn) nonotes ///
+>         keep(lnclag lnp lny lnpn D.lnclag LD.lnc D.lnp D.lny D.lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table22.rtf)
+
+.         
+.         
+. *Question 3: OLS vs. xtabond2
+. *OLS 
+. eststo clear
+
+. eststo OLS: reg lnc lnclag lnp lny lnpn yrd*
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+      Source |       SS           df       MS      Number of obs   =     1,334
+-------------+----------------------------------   F(32, 1301)     =  10727.71
+       Model |   472.98334        32  14.7807294   Prob > F        =    0.0000
+    Residual |  1.79252814     1,301  .001377808   R-squared       =    0.9962
+-------------+----------------------------------   Adj R-squared   =    0.9961
+       Total |  474.775868     1,333  .356170944   Root MSE        =    .03712
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .9633425   .0059916   160.78   0.000     .9515882    .9750967
+         lnp |  -.1223341   .0151205    -8.09   0.000    -.1519973   -.0926709
+         lny |  -.0117845   .0077479    -1.52   0.129    -.0269843    .0034153
+        lnpn |   .0341301   .0131094     2.60   0.009     .0084121     .059848
+        yrd1 |          0  (omitted)
+        yrd2 |   .0250314   .0136737     1.83   0.067    -.0017934    .0518563
+        yrd3 |   .0663337   .0132606     5.00   0.000     .0403192    .0923481
+        yrd4 |   .0368605   .0131656     2.80   0.005     .0110324    .0626886
+        yrd5 |   .0437674    .012928     3.39   0.001     .0184055    .0691293
+        yrd6 |    .017179   .0127259     1.35   0.177    -.0077865    .0421445
+        yrd7 |   .0042759   .0124768     0.34   0.732     -.020201    .0287528
+        yrd8 |  -.0111992   .0121908    -0.92   0.358    -.0351149    .0127164
+        yrd9 |   .0472304   .0118112     4.00   0.000     .0240593    .0704016
+       yrd10 |   .0660237   .0116191     5.68   0.000     .0432294     .088818
+       yrd11 |   .0171409   .0114506     1.50   0.135    -.0053228    .0396045
+       yrd12 |  -.0247261    .011492    -2.15   0.032    -.0472709   -.0021813
+       yrd13 |  -.0259402   .0112961    -2.30   0.022    -.0481008   -.0037796
+       yrd14 |   .0124992   .0109324     1.14   0.253    -.0089479    .0339462
+       yrd15 |  -.0199276    .010903    -1.83   0.068    -.0413168    .0014617
+       yrd16 |  -.0272116   .0105226    -2.59   0.010    -.0478547   -.0065684
+       yrd17 |  -.0860653   .0106312    -8.10   0.000    -.1069214   -.0652091
+       yrd18 |  -.0983924   .0109011    -9.03   0.000    -.1197781   -.0770067
+       yrd19 |  -.0802484    .011107    -7.23   0.000     -.102038   -.0584588
+       yrd20 |  -.0584754   .0106455    -5.49   0.000    -.0793596   -.0375912
+       yrd21 |  -.0446458   .0097029    -4.60   0.000    -.0636808   -.0256107
+       yrd22 |  -.0571725   .0090671    -6.31   0.000    -.0749603   -.0393846
+       yrd23 |  -.0180971   .0088463    -2.05   0.041    -.0354517   -.0007426
+       yrd24 |  -.0077671   .0085217    -0.91   0.362    -.0244849    .0089507
+       yrd25 |  -.0309161   .0083892    -3.69   0.000     -.047374   -.0144582
+       yrd26 |  -.0421125    .008213    -5.13   0.000    -.0582246   -.0260004
+       yrd27 |  -.0522136    .008046    -6.49   0.000    -.0679982    -.036429
+       yrd28 |  -.0614622   .0078983    -7.78   0.000     -.076957   -.0459674
+       yrd29 |  -.0331427   .0078603    -4.22   0.000     -.048563   -.0177224
+       yrd30 |          0  (omitted)
+       _cons |   .6555193   .0873504     7.50   0.000     .4841562    .8268824
+------------------------------------------------------------------------------
+
+. *GMM-1-Step
+. eststo GMM1Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq robust 
+Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
+Warning: Number of instruments may be large relative to number of observations.
+Warning: Two-step estimated covariance matrix of moments is singular.
+  Using a generalized inverse to calculate robust weighting matrix for Hansen test.
+  Difference-in-Sargan/Hansen statistics may be negative.
+
+Dynamic panel-data estimation, one-step difference GMM
+------------------------------------------------------------------------------
+Group variable: state                           Number of obs      =      1288
+Time variable : yr                              Number of groups   =        46
+Number of instruments = 437                     Obs per group: min =        28
+Wald chi2(34) = 325482.45                                      avg =     28.00
+Prob > chi2   =     0.000                                      max =        28
+------------------------------------------------------------------------------
+             |               Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .8325298    .028453    29.26   0.000     .7767629    .8882966
+         lnp |  -.3701281   .0426622    -8.68   0.000    -.4537444   -.2865118
+         lny |   .1343292   .0611793     2.20   0.028       .01442    .2542385
+        lnpn |  -.0277971   .0585045    -0.48   0.635    -.1424638    .0868697
+        yrd1 |          0  (omitted)
+        yrd2 |          0  (omitted)
+        yrd3 |   .0245335    .008098     3.03   0.002     .0086618    .0404052
+        yrd4 |  -.0036895   .0126763    -0.29   0.771    -.0285346    .0211556
+        yrd5 |   -.006376   .0129135    -0.49   0.621    -.0316859     .018934
+        yrd6 |   -.031973   .0116997    -2.73   0.006    -.0549039    -.009042
+        yrd7 |  -.0610858   .0141126    -4.33   0.000     -.088746   -.0334255
+        yrd8 |  -.0785204   .0185803    -4.23   0.000    -.1149371   -.0421038
+        yrd9 |  -.0313602   .0193515    -1.62   0.105    -.0692885    .0065681
+       yrd10 |  -.0207293   .0230216    -0.90   0.368    -.0658508    .0243922
+       yrd11 |  -.0945154   .0256249    -3.69   0.000    -.1447392   -.0442916
+       yrd12 |  -.1608971   .0265117    -6.07   0.000     -.212859   -.1089352
+       yrd13 |  -.1774259   .0278202    -6.38   0.000    -.2319524   -.1228994
+       yrd14 |  -.1454975   .0307275    -4.74   0.000    -.2057224   -.0852727
+       yrd15 |  -.1973186   .0328163    -6.01   0.000    -.2616374   -.1329998
+       yrd16 |  -.2082932   .0347039    -6.00   0.000    -.2763116   -.1402748
+       yrd17 |  -.2948523   .0359774    -8.20   0.000    -.3653668   -.2243378
+       yrd18 |   -.339155   .0389466    -8.71   0.000     -.415489    -.262821
+       yrd19 |  -.3516521   .0434244    -8.10   0.000    -.4367625   -.2665418
+       yrd20 |  -.3281651   .0442169    -7.42   0.000    -.4148286   -.2415016
+       yrd21 |  -.2913099   .0452986    -6.43   0.000    -.3800935   -.2025264
+       yrd22 |  -.2917243   .0476427    -6.12   0.000    -.3851023   -.1983462
+       yrd23 |  -.2596075   .0490943    -5.29   0.000    -.3558306   -.1633845
+       yrd24 |  -.2446946   .0526655    -4.65   0.000    -.3479171   -.1414721
+       yrd25 |   -.267319   .0549298    -4.87   0.000    -.3749794   -.1596587
+       yrd26 |  -.2802805   .0561697    -4.99   0.000    -.3903711   -.1701899
+       yrd27 |  -.2906365   .0603246    -4.82   0.000    -.4088707   -.1724024
+       yrd28 |  -.3003276   .0621047    -4.84   0.000    -.4220506   -.1786046
+       yrd29 |  -.2785422    .065695    -4.24   0.000     -.407302   -.1497823
+       yrd30 |   -.230017    .070966    -3.24   0.001    -.3691079   -.0909261
+------------------------------------------------------------------------------
+Instruments for first differences equation
+  Standard
+    D.(lnp lny lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11
+    yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23
+    yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
+  GMM-type (missing=0, separate instruments for each period unless collapsed)
+    L(1/29).lnclag
+------------------------------------------------------------------------------
+Arellano-Bond test for AR(1) in first differences: z =  -5.08  Pr > z =  0.000
+Arellano-Bond test for AR(2) in first differences: z =   2.14  Pr > z =  0.032
+------------------------------------------------------------------------------
+Sargan test of overid. restrictions: chi2(403)  = 561.83  Prob > chi2 =  0.000
+  (Not robust, but not weakened by many instruments.)
+Hansen test of overid. restrictions: chi2(403)  =  24.41  Prob > chi2 =  1.000
+  (Robust, but weakened by many instruments.)
+
+Difference-in-Hansen tests of exogeneity of instrument subsets:
+  iv(lnp lny lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11 yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 
+> yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
+    Hansen test excluding group:     chi2(372)  =  20.16  Prob > chi2 =  1.000
+    Difference (null H = exogenous): chi2(31)   =   4.26  Prob > chi2 =  1.000
+
+
+. *GMM-2-Step
+. eststo GMM2Step: xtabond2 lnc lnclag lnp lny lnpn yrd*, gmm(lnclag) iv(lnp lny lnpn yrd*) noleveleq twostep 
+Favoring space over speed. To switch, type or click on mata: mata set matafavor speed, perm.
+Warning: Number of instruments may be large relative to number of observations.
+Warning: Two-step estimated covariance matrix of moments is singular.
+  Using a generalized inverse to calculate optimal weighting matrix for two-step estimation.
+  Difference-in-Sargan/Hansen statistics may be negative.
+
+Dynamic panel-data estimation, two-step difference GMM
+------------------------------------------------------------------------------
+Group variable: state                           Number of obs      =      1288
+Time variable : yr                              Number of groups   =        46
+Number of instruments = 437                     Obs per group: min =        28
+Wald chi2(34) =  1.21e+06                                      avg =     28.00
+Prob > chi2   =     0.000                                      max =        28
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .7237568   .1470698     4.92   0.000     .4355054    1.012008
+         lnp |  -.4054118   .0437029    -9.28   0.000    -.4910679   -.3197556
+         lny |   .2708228   .2599324     1.04   0.297    -.2386354     .780281
+        lnpn |  -.0492178   .0500383    -0.98   0.325    -.1472911    .0488554
+        yrd1 |          0  (omitted)
+        yrd2 |   .0186796   .0257144     0.73   0.468    -.0317197    .0690789
+        yrd3 |   .0321059   .0079483     4.04   0.000     .0165276    .0476843
+        yrd4 |          0  (omitted)
+        yrd5 |  -.0089751   .0164104    -0.55   0.584    -.0411388    .0231886
+        yrd6 |  -.0383152   .0252658    -1.52   0.129    -.0878352    .0112048
+        yrd7 |  -.0797499    .036271    -2.20   0.028    -.1508398   -.0086599
+        yrd8 |  -.1096543    .049058    -2.24   0.025    -.2058062   -.0135025
+        yrd9 |  -.0682425   .0647975    -1.05   0.292    -.1952433    .0587584
+       yrd10 |  -.0684663   .0784085    -0.87   0.383     -.222144    .0852115
+       yrd11 |  -.1541851   .0953809    -1.62   0.106    -.3411283     .032758
+       yrd12 |   -.220582   .0944054    -2.34   0.019    -.4056132   -.0355509
+       yrd13 |  -.2500441   .1033771    -2.42   0.016    -.4526595   -.0474287
+       yrd14 |  -.2277936    .117303    -1.94   0.052    -.4577033    .0021161
+       yrd15 |  -.2844126   .1298347    -2.19   0.028     -.538884   -.0299412
+       yrd16 |  -.3091539   .1459283    -2.12   0.034    -.5951682   -.0231396
+       yrd17 |  -.4050552   .1549426    -2.61   0.009    -.7087372   -.1013733
+       yrd18 |  -.4633495   .1620578    -2.86   0.004     -.780977   -.1457221
+       yrd19 |   -.487801   .1790091    -2.73   0.006    -.8386524   -.1369497
+       yrd20 |  -.4761419    .193179    -2.46   0.014    -.8547658   -.0975179
+       yrd21 |  -.4396522    .208869    -2.10   0.035    -.8490279   -.0302764
+       yrd22 |  -.4467161   .2270513    -1.97   0.049    -.8917285   -.0017037
+       yrd23 |  -.4266644   .2435701    -1.75   0.080    -.9040531    .0507244
+       yrd24 |  -.4194304   .2584193    -1.62   0.105    -.9259229    .0870621
+       yrd25 |  -.4461261   .2658054    -1.68   0.093    -.9670952     .074843
+       yrd26 |   -.469357    .283279    -1.66   0.098    -1.024574    .0858597
+       yrd27 |  -.4874118   .2961218    -1.65   0.100      -1.0678    .0929763
+       yrd28 |  -.5038321   .3123716    -1.61   0.107    -1.116069    .1084051
+       yrd29 |  -.4939214    .322699    -1.53   0.126      -1.1264     .138557
+       yrd30 |  -.4525123   .3436775    -1.32   0.188    -1.126108    .2210833
+------------------------------------------------------------------------------
+Warning: Uncorrected two-step standard errors are unreliable.
+
+Instruments for first differences equation
+  Standard
+    D.(lnp lny lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11
+    yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 yrd21 yrd22 yrd23
+    yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
+  GMM-type (missing=0, separate instruments for each period unless collapsed)
+    L(1/29).lnclag
+------------------------------------------------------------------------------
+Arellano-Bond test for AR(1) in first differences: z =  -4.44  Pr > z =  0.000
+Arellano-Bond test for AR(2) in first differences: z =   1.82  Pr > z =  0.068
+------------------------------------------------------------------------------
+Sargan test of overid. restrictions: chi2(403)  = 561.83  Prob > chi2 =  0.000
+  (Not robust, but not weakened by many instruments.)
+Hansen test of overid. restrictions: chi2(403)  =  24.41  Prob > chi2 =  1.000
+  (Robust, but weakened by many instruments.)
+
+Difference-in-Hansen tests of exogeneity of instrument subsets:
+  iv(lnp lny lnpn yrd1 yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10 yrd11 yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20 
+> yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 yrd30)
+    Hansen test excluding group:     chi2(372)  =  20.16  Prob > chi2 =  1.000
+    Difference (null H = exogenous): chi2(31)   =   4.26  Prob > chi2 =  1.000
+
+
+. esttab OLS GMM1Step GMM2Step ///
+>         using $root\Table3.rtf, replace se noobs compress nogaps label ///
+>         mtitle("OLS" "GMM1Step" "GMM2Step") ///
+>         title(Table 3: OLS vs. xtabond2) ///
+>         order(lnclag lnp lny lnpn) nonotes ///
+>         keep(lnclag lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table3.rtf)
+
+. 
+. 
+. *Question 4: FE vs. RE
+. *FE
+. eststo FE: xtreg lnc lnclag lnp lny lnpn yrd*, fe
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+
+R-sq:                                           Obs per group:
+     within  = 0.9964                                         min =         29
+     between = 0.9859                                         avg =       29.0
+     overall = 0.9947                                         max =         29
+
+                                                F(32,1256)        =   10880.08
+corr(u_i, Xb)  = 0.1667                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .8302515   .0126242    65.77   0.000     .8054847    .8550183
+         lnp |  -.2916821   .0230847   -12.64   0.000    -.3369709   -.2463932
+         lny |     .10687   .0233417     4.58   0.000     .0610769     .152663
+        lnpn |   .0354562     .02656     1.33   0.182    -.0166507    .0875631
+        yrd1 |          0  (omitted)
+        yrd2 |   .2625931   .0271015     9.69   0.000     .2094239    .3157624
+        yrd3 |   .2899732   .0258674    11.21   0.000     .2392251    .3407214
+        yrd4 |   .2600526   .0253245    10.27   0.000     .2103695    .3097356
+        yrd5 |   .2587544   .0246723    10.49   0.000     .2103509    .3071579
+        yrd6 |   .2298556   .0239406     9.60   0.000     .1828877    .2768235
+        yrd7 |   .2048639   .0233869     8.76   0.000     .1589823    .2507455
+        yrd8 |   .1840194   .0224699     8.19   0.000     .1399368     .228102
+        yrd9 |   .2307543   .0213872    10.79   0.000     .1887958    .2727128
+       yrd10 |   .2425009   .0206783    11.73   0.000      .201933    .2830687
+       yrd11 |   .1775635   .0201721     8.80   0.000     .1379888    .2171381
+       yrd12 |   .1207647    .020777     5.81   0.000     .0800032    .1615262
+       yrd13 |   .1065501   .0204389     5.21   0.000      .066452    .1466483
+       yrd14 |   .1358017   .0193459     7.02   0.000     .0978479    .1737555
+       yrd15 |   .0895934   .0193021     4.64   0.000     .0517255    .1274614
+       yrd16 |   .0748198   .0179832     4.16   0.000     .0395393    .1101002
+       yrd17 |  -.0034918   .0185773    -0.19   0.851    -.0399379    .0329542
+       yrd18 |  -.0391436   .0198921    -1.97   0.049    -.0781689   -.0001183
+       yrd19 |  -.0452863   .0206285    -2.20   0.028    -.0857564   -.0048163
+       yrd20 |  -.0284583   .0193185    -1.47   0.141    -.0663584    .0094418
+       yrd21 |  -.0074796   .0161571    -0.46   0.643    -.0391774    .0242183
+       yrd22 |  -.0193512   .0136534    -1.42   0.157    -.0461371    .0074348
+       yrd23 |    .009891     .01278     0.77   0.439    -.0151815    .0349636
+       yrd24 |   .0181028   .0112771     1.61   0.109    -.0040213    .0402269
+       yrd25 |  -.0074513   .0106683    -0.70   0.485     -.028381    .0134784
+       yrd26 |  -.0243092   .0097891    -2.48   0.013     -.043514   -.0051044
+       yrd27 |  -.0396239   .0089818    -4.41   0.000     -.057245   -.0220028
+       yrd28 |  -.0549562   .0082085    -6.70   0.000    -.0710601   -.0388523
+       yrd29 |  -.0354741   .0080744    -4.39   0.000    -.0513149   -.0196333
+       yrd30 |          0  (omitted)
+       _cons |   .9207886   .2834261     3.25   0.001     .3647478    1.476829
+-------------+----------------------------------------------------------------
+     sigma_u |    .027383
+     sigma_e |  .03504775
+         rho |  .37905099   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(45, 1256) = 4.52                    Prob > F = 0.0000
+
+. eststo RE: xtreg lnc lnclag lnp lny lnpn yrd*, re
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+Random-effects GLS regression                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+
+R-sq:                                           Obs per group:
+     within  = 0.9960                                         min =         29
+     between = 0.9982                                         avg =       29.0
+     overall = 0.9962                                         max =         29
+
+                                                Wald chi2(32)     =  343286.84
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .9633425   .0059916   160.78   0.000     .9515992    .9750857
+         lnp |  -.1223341   .0151205    -8.09   0.000    -.1519697   -.0926985
+         lny |  -.0117845   .0077479    -1.52   0.128    -.0269702    .0034012
+        lnpn |   .0341301   .0131094     2.60   0.009      .008436    .0598241
+        yrd1 |          0  (omitted)
+        yrd2 |   .0250314   .0136737     1.83   0.067    -.0017685    .0518313
+        yrd3 |   .0663337   .0132606     5.00   0.000     .0403434    .0923239
+        yrd4 |   .0368605   .0131656     2.80   0.005     .0110564    .0626646
+        yrd5 |   .0437674    .012928     3.39   0.001     .0184291    .0691057
+        yrd6 |    .017179   .0127259     1.35   0.177    -.0077633    .0421212
+        yrd7 |   .0042759   .0124768     0.34   0.732    -.0201783      .02873
+        yrd8 |  -.0111992   .0121908    -0.92   0.358    -.0350927    .0126942
+        yrd9 |   .0472304   .0118112     4.00   0.000     .0240808      .07038
+       yrd10 |   .0660237   .0116191     5.68   0.000     .0432506    .0887968
+       yrd11 |   .0171409   .0114506     1.50   0.134    -.0053019    .0395836
+       yrd12 |  -.0247261    .011492    -2.15   0.031    -.0472499   -.0022022
+       yrd13 |  -.0259402   .0112961    -2.30   0.022    -.0480802   -.0038002
+       yrd14 |   .0124992   .0109324     1.14   0.253    -.0089279    .0339263
+       yrd15 |  -.0199276    .010903    -1.83   0.068    -.0412969    .0014418
+       yrd16 |  -.0272116   .0105226    -2.59   0.010    -.0478355   -.0065876
+       yrd17 |  -.0860653   .0106312    -8.10   0.000     -.106902   -.0652285
+       yrd18 |  -.0983924   .0109011    -9.03   0.000    -.1197582   -.0770266
+       yrd19 |  -.0802484    .011107    -7.23   0.000    -.1020178    -.058479
+       yrd20 |  -.0584754   .0106455    -5.49   0.000    -.0793402   -.0376106
+       yrd21 |  -.0446458   .0097029    -4.60   0.000    -.0636631   -.0256284
+       yrd22 |  -.0571725   .0090671    -6.31   0.000    -.0749437   -.0394012
+       yrd23 |  -.0180971   .0088463    -2.05   0.041    -.0354355   -.0007588
+       yrd24 |  -.0077671   .0085217    -0.91   0.362    -.0244694    .0089351
+       yrd25 |  -.0309161   .0083892    -3.69   0.000    -.0473586   -.0144735
+       yrd26 |  -.0421125    .008213    -5.13   0.000    -.0582096   -.0260154
+       yrd27 |  -.0522136    .008046    -6.49   0.000    -.0679835   -.0364437
+       yrd28 |  -.0614622   .0078983    -7.78   0.000    -.0769426   -.0459818
+       yrd29 |  -.0331427   .0078603    -4.22   0.000    -.0485486   -.0177368
+       yrd30 |          0  (omitted)
+       _cons |   .6555193   .0873504     7.50   0.000     .4843157     .826723
+-------------+----------------------------------------------------------------
+     sigma_u |          0
+     sigma_e |  .03504775
+         rho |          0   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. esttab FE RE ///
+>         using $root\Table4.rtf, replace se noobs compress nogaps label ///
+>         mtitle("FE" "RE") ///
+>         title(Table 4: FE vs. RE) ///
+>         order(lnclag lnp lny lnpn) nonotes ///
+>         keep(lnclag lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table4.rtf)
+
+. 
+. *Question 5: 2SLS (ivregress), FE-2SLS and RE-2SLS (xtivreg) vs. Q3 and Q4
+. *2SLS (ivregress)
+. eststo TSLS: ivregress 2sls lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn)
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+Instrumental variables (2SLS) regression          Number of obs   =      1,334
+                                                  Wald chi2(32)   =   80538.31
+                                                  Prob > chi2     =     0.0000
+                                                  R-squared       =     0.9847
+                                                  Root MSE        =     .07374
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .5861426   .0588903     9.95   0.000     .4707196    .7015655
+         lnp |  -.5758889   .0755754    -7.62   0.000     -.724014   -.4277638
+         lny |   .2118778   .0375026     5.65   0.000     .1383741    .2853816
+        lnpn |   .0837297    .027124     3.09   0.002     .0305675    .1368918
+        yrd1 |          0  (omitted)
+        yrd2 |   .6616282   .1010566     6.55   0.000     .4635609    .8596955
+        yrd3 |   .6706808   .0960879     6.98   0.000      .482352    .8590097
+        yrd4 |   .6427809   .0962678     6.68   0.000     .4540994    .8314623
+        yrd5 |   .6295985   .0931842     6.76   0.000     .4469608    .8122361
+        yrd6 |   .5974619   .0922582     6.48   0.000     .4166392    .7782846
+        yrd7 |   .5539902   .0876312     6.32   0.000     .3822362    .7257442
+        yrd8 |   .5237346   .0853028     6.14   0.000     .3565441     .690925
+        yrd9 |   .5515567   .0806036     6.84   0.000     .3935765    .7095369
+       yrd10 |   .5555018   .0783211     7.09   0.000     .4019953    .7090083
+       yrd11 |   .4721153   .0731914     6.45   0.000     .3286628    .6155679
+       yrd12 |   .3896517   .0673469     5.79   0.000     .2576541    .5216492
+       yrd13 |   .3522488   .0620276     5.68   0.000     .2306769    .4738208
+       yrd14 |   .3650191    .058112     6.28   0.000     .2511217    .4789165
+       yrd15 |   .2988077   .0533317     5.60   0.000     .1942795    .4033358
+       yrd16 |   .2719085   .0502869     5.41   0.000      .173348    .3704689
+       yrd17 |   .1613676   .0433287     3.72   0.000      .076445    .2462902
+       yrd18 |   .0831904   .0352111     2.36   0.018     .0141778    .1522029
+       yrd19 |   .0360005   .0283334     1.27   0.204    -.0195319    .0915329
+       yrd20 |   .0399912   .0259595     1.54   0.123    -.0108885     .090871
+       yrd21 |   .0685816   .0259087     2.65   0.008     .0178015    .1193617
+       yrd22 |   .0560642   .0249844     2.24   0.025     .0070958    .1050326
+       yrd23 |   .0674784   .0219097     3.08   0.002     .0245362    .1104205
+       yrd24 |   .0712826   .0208007     3.43   0.001     .0305139    .1120513
+       yrd25 |   .0413525    .019996     2.07   0.039     .0021611    .0805439
+       yrd26 |   .0150142   .0185063     0.81   0.417    -.0212576    .0512859
+       yrd27 |  -.0110289   .0171794    -0.64   0.521    -.0446999    .0226422
+       yrd28 |  -.0385687   .0160759    -2.40   0.016    -.0700769   -.0070604
+       yrd29 |  -.0374087   .0156283    -2.39   0.017    -.0680397   -.0067777
+       yrd30 |          0  (omitted)
+       _cons |   2.120525   .2833516     7.48   0.000     1.565166    2.675884
+------------------------------------------------------------------------------
+Instrumented:  lnclag
+Instruments:   lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
+               yrd11 yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20
+               yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 L.lnp
+               L.lny L.lnpn
+
+. *FE-2SLS (xtivreg)
+. eststo FE2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), fe
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+Fixed-effects (within) IV regression            Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+
+R-sq:                                           Obs per group:
+     within  = 0.9952                                         min =         29
+     between = 0.9272                                         avg =       29.0
+     overall = 0.9838                                         max =         29
+
+                                                Wald chi2(32)     =   2.22e+07
+corr(u_i, Xb)  = 0.1521                         Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .5683385   .0357238    15.91   0.000     .4983212    .6383558
+         lnp |  -.5170861   .0387588   -13.34   0.000     -.593052   -.4411203
+         lny |   .2275951   .0309391     7.36   0.000     .1669555    .2882347
+        lnpn |   -.014093    .031388    -0.45   0.653    -.0756124    .0474263
+        yrd1 |          0  (omitted)
+        yrd2 |    .690599   .0618285    11.17   0.000     .5694173    .8117807
+        yrd3 |   .6973673   .0588929    11.84   0.000     .5819394    .8127952
+        yrd4 |   .6689177   .0587337    11.39   0.000     .5538018    .7840337
+        yrd5 |   .6546078   .0569537    11.49   0.000     .5429805    .7662351
+        yrd6 |   .6233027   .0562722    11.08   0.000     .5130113    .7335941
+        yrd7 |   .5765382   .0536043    10.76   0.000     .4714757    .6816006
+        yrd8 |   .5451842   .0519394    10.50   0.000     .4433848    .6469835
+        yrd9 |   .5707877   .0490358    11.64   0.000     .4746793     .666896
+       yrd10 |    .573045   .0476019    12.04   0.000      .479747     .666343
+       yrd11 |   .4865704   .0449988    10.81   0.000     .3983744    .5747664
+       yrd12 |   .4010668   .0423818     9.46   0.000     .3179999    .4841336
+       yrd13 |   .3617335   .0396135     9.13   0.000     .2840924    .4393745
+       yrd14 |   .3743683   .0371995    10.06   0.000     .3014586    .4472779
+       yrd15 |   .3059851   .0350045     8.74   0.000     .2373776    .3745926
+       yrd16 |   .2789794   .0328577     8.49   0.000     .2145794    .3433794
+       yrd17 |   .1655442    .030097     5.50   0.000     .1065552    .2245331
+       yrd18 |   .0833616   .0276348     3.02   0.003     .0291984    .1375248
+       yrd19 |   .0321685   .0257732     1.25   0.212    -.0183461    .0826831
+       yrd20 |   .0365017   .0238001     1.53   0.125    -.0101456     .083149
+       yrd21 |    .067369   .0209108     3.22   0.001     .0263846    .1083535
+       yrd22 |   .0566023    .018429     3.07   0.002     .0204821    .0927225
+       yrd23 |   .0671812   .0164355     4.09   0.000     .0349683    .0993941
+       yrd24 |   .0728973   .0147393     4.95   0.000     .0440087    .1017858
+       yrd25 |   .0423932   .0138307     3.07   0.002     .0152855    .0695008
+       yrd26 |   .0151158   .0123586     1.22   0.221    -.0091065    .0393382
+       yrd27 |  -.0112773   .0109892    -1.03   0.305    -.0328157    .0102612
+       yrd28 |  -.0393913   .0097068    -4.06   0.000    -.0584163   -.0203663
+       yrd29 |  -.0398492    .009372    -4.25   0.000     -.058218   -.0214803
+       yrd30 |          0  (omitted)
+       _cons |   2.227931   .3664924     6.08   0.000     1.509619    2.946243
+-------------+----------------------------------------------------------------
+     sigma_u |  .06670382
+     sigma_e |  .04061161
+         rho |  .72956492   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F  test that all u_i=0:     F(45,1256) =     4.13         Prob > F    = 0.0000
+------------------------------------------------------------------------------
+Instrumented:   lnclag
+Instruments:    lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
+                yrd11 yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20
+                yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 L.lnp
+                L.lny L.lnpn
+------------------------------------------------------------------------------
+
+. *RE-2SLS (xtivreg)
+. eststo RE2SLS: xtivreg lnc lnp lny lnpn yrd* (lnclag = L.lnp L.lny L.lnpn), re
+note: yrd1 omitted because of collinearity
+note: yrd30 omitted because of collinearity
+
+G2SLS random-effects IV regression              Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+
+R-sq:                                           Obs per group:
+     within  = 0.9953                                         min =         29
+     between = 0.9355                                         avg =       29.0
+     overall = 0.9851                                         max =         29
+
+                                                Wald chi2(32)     =   78546.35
+corr(u_i, X)       = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      lnclag |   .5861438   .0596323     9.83   0.000     .4692666     .703021
+         lnp |  -.5758874   .0765276    -7.53   0.000    -.7258788   -.4258961
+         lny |    .211877   .0379751     5.58   0.000     .1374472    .2863068
+        lnpn |   .0837295   .0274658     3.05   0.002     .0298974    .1375615
+        yrd1 |          0  (omitted)
+        yrd2 |   .6616262   .1023298     6.47   0.000     .4610634     .862189
+        yrd3 |   .6706789   .0972985     6.89   0.000     .4799772    .8613805
+        yrd4 |   .6427789   .0974807     6.59   0.000     .4517202    .8338376
+        yrd5 |   .6295966   .0943582     6.67   0.000     .4446579    .8145353
+        yrd6 |   .5974601   .0934206     6.40   0.000     .4143591     .780561
+        yrd7 |   .5539885   .0887353     6.24   0.000     .3800705    .7279064
+        yrd8 |   .5237328   .0863775     6.06   0.000      .354436    .6930297
+        yrd9 |   .5515551   .0816192     6.76   0.000     .3915845    .7115257
+       yrd10 |   .5555002   .0793079     7.00   0.000     .4000597    .7109408
+       yrd11 |   .4721139   .0741136     6.37   0.000     .3268539    .6173738
+       yrd12 |   .3896503   .0681954     5.71   0.000     .2559897    .5233109
+       yrd13 |   .3522476   .0628091     5.61   0.000     .2291439    .4753513
+       yrd14 |    .365018   .0588442     6.20   0.000     .2496855    .4803504
+       yrd15 |   .2988066   .0540036     5.53   0.000     .1929615    .4046518
+       yrd16 |   .2719075   .0509204     5.34   0.000     .1721053    .3717097
+       yrd17 |   .1613668   .0438746     3.68   0.000     .0753743    .2473594
+       yrd18 |   .0831898   .0356548     2.33   0.020     .0133077    .1530719
+       yrd19 |   .0360001   .0286904     1.25   0.210     -.020232    .0922322
+       yrd20 |   .0399909   .0262866     1.52   0.128      -.01153    .0915117
+       yrd21 |   .0685812   .0262351     2.61   0.009     .0171613    .1200012
+       yrd22 |   .0560638   .0252992     2.22   0.027     .0064784    .1056493
+       yrd23 |   .0674781   .0221857     3.04   0.002     .0239949    .1109613
+       yrd24 |   .0712824   .0210628     3.38   0.001     .0299999    .1125648
+       yrd25 |   .0413522   .0202479     2.04   0.041      .001667    .0810374
+       yrd26 |    .015014   .0187395     0.80   0.423    -.0217148    .0517428
+       yrd27 |   -.011029   .0173959    -0.63   0.526    -.0451243    .0230663
+       yrd28 |  -.0385687   .0162785    -2.37   0.018     -.070474   -.0066635
+       yrd29 |  -.0374087   .0158253    -2.36   0.018    -.0684256   -.0063917
+       yrd30 |          0  (omitted)
+       _cons |   2.120521   .2869219     7.39   0.000     1.558164    2.682878
+-------------+----------------------------------------------------------------
+     sigma_u |          0
+     sigma_e |  .04061161
+         rho |          0   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Instrumented:   lnclag
+Instruments:    lnp lny lnpn yrd2 yrd3 yrd4 yrd5 yrd6 yrd7 yrd8 yrd9 yrd10
+                yrd11 yrd12 yrd13 yrd14 yrd15 yrd16 yrd17 yrd18 yrd19 yrd20
+                yrd21 yrd22 yrd23 yrd24 yrd25 yrd26 yrd27 yrd28 yrd29 L.lnp
+                L.lny L.lnpn
+------------------------------------------------------------------------------
+
+. esttab TSLS FE2SLS RE2SLS ///
+>         using $root\Table5.rtf, replace se noobs compress nogaps label ///
+>         mtitle("2SLS" "FE-2SLS" "RE-2SLS") ///
+>         title(Table 5: 2SLS (ivregress), FE-2SLS and RE-2SLS (xtivreg)) ///
+>         order(lnclag lnp lny lnpn) nonotes ///
+>         keep(lnclag lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table5.rtf)
+
+. 
+. 
+. *Question 6: xtdpdsys vs. xtabond, comparing to FE and RE?
+. * Part 6.
+. eststo xtdpdsys: xtdpdsys lnc lnp lny lnpn yrd*, lags(1) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+
+System dynamic panel-data estimation            Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =    466                  Wald chi2(32)     =  285321.92
+                                                Prob > chi2       =     0.0000
+Two-step results
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .7464635   11.57398     0.06   0.949    -21.93812    23.43104
+             |
+         lnp |  -.3883767   1.207028    -0.32   0.748    -2.754108    1.977355
+         lny |   .4107697   15.71965     0.03   0.979    -30.39918    31.22072
+        lnpn |  -.0165675   4.249511    -0.00   0.997    -8.345456    8.312321
+        yrd2 |   .5180377   12.34097     0.04   0.967    -23.66981    24.70589
+        yrd3 |   .5236243    12.5983     0.04   0.967    -24.16859    25.21584
+        yrd4 |   .4798947   13.19134     0.04   0.971    -25.37466    26.33445
+        yrd5 |   .4755209   12.72926     0.04   0.970    -24.47336    25.42441
+        yrd6 |   .4375273   13.67157     0.03   0.974    -26.35825     27.2333
+        yrd7 |   .4017135    13.2138     0.03   0.976    -25.49686    26.30029
+        yrd8 |   .3692338   12.58464     0.03   0.977    -24.29621    25.03467
+        yrd9 |   .4061226   11.76093     0.03   0.972    -22.64489    23.45713
+       yrd10 |   .4017847    12.2426     0.03   0.974    -23.59326    24.39683
+       yrd11 |   .3104734   13.53144     0.02   0.982    -26.21066    26.83161
+       yrd12 |   .2527892   12.83514     0.02   0.984    -24.90363    25.40921
+       yrd13 |   .2259557   12.05401     0.02   0.985    -23.39946    23.85138
+       yrd14 |   .2468167   11.02415     0.02   0.982    -21.36012    21.85376
+       yrd15 |   .1896115   11.24346     0.02   0.987    -21.84716    22.22638
+       yrd16 |   .1603593   11.42362     0.01   0.989    -22.22953    22.55025
+       yrd17 |   .0682996   10.71763     0.01   0.995    -20.93786    21.07446
+       yrd18 |   .0243043    8.77268     0.00   0.998    -17.16983    17.21844
+       yrd19 |  -.0007283   7.550931    -0.00   1.000    -14.80028    14.79882
+       yrd20 |   .0167868   6.178917     0.00   0.998    -12.09367    12.12724
+       yrd21 |   .0431947   5.206628     0.01   0.993    -10.16161      10.248
+       yrd22 |   .0254131   4.944023     0.01   0.996    -9.664694    9.715521
+       yrd23 |   .0451898   4.244242     0.01   0.992    -8.273372    8.363751
+       yrd24 |   .0482034   3.982341     0.01   0.990    -7.757042    7.853448
+       yrd25 |   .0147314   3.615851     0.00   0.997    -7.072207     7.10167
+       yrd26 |   -.003415   3.274281    -0.00   0.999    -6.420889    6.414059
+       yrd27 |  -.0300402   2.368531    -0.01   0.990    -4.672276    4.612196
+       yrd28 |  -.0483281   1.890924    -0.03   0.980    -3.754471    3.657815
+       yrd29 |  -.0332751    .322105    -0.10   0.918    -.6645893     .598039
+       _cons |  -.8597731   180.9542    -0.00   0.996    -355.5235    353.8039
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(2/.).lnc
+        Standard: D.lnp D.lny D.lnpn D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6
+                  D.yrd7 D.yrd8 D.yrd9 D.yrd10 D.yrd11 D.yrd12 D.yrd13
+                  D.yrd14 D.yrd15 D.yrd16 D.yrd17 D.yrd18 D.yrd19 D.yrd20
+                  D.yrd21 D.yrd22 D.yrd23 D.yrd24 D.yrd25 D.yrd26 D.yrd27
+                  D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        GMM-type: LD.lnc
+        Standard: _cons
+
+. esttab xtdpdsys GMM1Step GMM2Step FE RE ///
+>         using $root\Table6.rtf, replace se noobs compress nogaps label ///
+>         mtitle("xtdpdsys" "GMM-1-Step" "GMM-2-Step" "FE" "RE") ///
+>         title(Table 6: xtdpdsys vs. xtabond, comparing to FE and RE) ///
+>         order(lnclag L.lnc lnp lny lnpn) nonotes ///
+>         keep(lnclag L.lnc lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table6.rtf)
+
+. 
+. 
+. *Question 7: use xtdpd to replicate xtabond
+. eststo xtdpd: xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnc) div(lnp lny lnpn yrd*) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+note: D.yrd2 dropped because of collinearity
+
+Dynamic panel-data estimation                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =    438                  Wald chi2(31)     =  145286.37
+                                                Prob > chi2       =     0.0000
+Two-step results
+                                  (Std. Err. adjusted for clustering on state)
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .9756971   9.325648     0.10   0.917    -17.30224    19.25363
+             |
+         lnp |  -.3601225    6.57322    -0.05   0.956     -13.2434    12.52315
+         lny |   .1885189   27.49363     0.01   0.995    -53.69801    54.07505
+        lnpn |  -.0526997   7.261875    -0.01   0.994    -14.28571    14.18031
+        yrd3 |   .0303517   1.810627     0.02   0.987    -3.518412    3.579116
+        yrd4 |   -.005409    2.76191    -0.00   0.998    -5.418653    5.407835
+        yrd5 |   .0060338   3.081485     0.00   0.998    -6.033565    6.045632
+        yrd6 |  -.0234061   3.837468    -0.01   0.995    -7.544706    7.497894
+        yrd7 |  -.0450939   3.642127    -0.01   0.990    -7.183532    7.093344
+        yrd8 |  -.0648363   3.557395    -0.02   0.985    -7.037202    6.907529
+        yrd9 |   .0022833    3.42706     0.00   0.999    -6.714631    6.719198
+       yrd10 |   .0088689   4.172681     0.00   0.998    -8.169436    8.187174
+       yrd11 |  -.0652782   5.800315    -0.01   0.991    -11.43369    11.30313
+       yrd12 |  -.1194062   4.530731    -0.03   0.979    -8.999476    8.760663
+       yrd13 |  -.1304103   3.644329    -0.04   0.971    -7.273165    7.012344
+       yrd14 |  -.0852513   3.650739    -0.02   0.981    -7.240568    7.070065
+       yrd15 |  -.1291609   4.012713    -0.03   0.974    -7.993934    7.735612
+       yrd16 |  -.1385367   4.670481    -0.03   0.976    -9.292511    9.015438
+       yrd17 |  -.2168877    3.76123    -0.06   0.954    -7.588763    7.154987
+       yrd18 |  -.2393867   1.594042    -0.15   0.881    -3.363652    2.884878
+       yrd19 |   -.238175   .8859599    -0.27   0.788    -1.974625    1.498275
+       yrd20 |  -.1983349   1.026918    -0.19   0.847    -2.211057    1.814387
+       yrd21 |  -.1468415   .8620905    -0.17   0.865    -1.836508    1.542825
+       yrd22 |  -.1408357   .4670656    -0.30   0.763    -1.056267     .774596
+       yrd23 |  -.0983899   .5042897    -0.20   0.845     -1.08678    .8899998
+       yrd24 |  -.0776881   .5031594    -0.15   0.877    -1.063862    .9084862
+       yrd25 |  -.0941934   .5316241    -0.18   0.859    -1.136157    .9477706
+       yrd26 |  -.0998233   .6117714    -0.16   0.870    -1.298873    1.099227
+       yrd27 |  -.0999999   .3799707    -0.26   0.792    -.8447288    .6447289
+       yrd28 |  -.0950722   .1960468    -0.48   0.628    -.4793169    .2891724
+       yrd29 |  -.0638134    1.12592    -0.06   0.955    -2.270577     2.14295
+       _cons |   .2831618   300.8488     0.00   0.999    -589.3696    589.9359
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(2/.).lnc
+        Standard: D.lnp D.lny D.lnpn D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6
+                  D.yrd7 D.yrd8 D.yrd9 D.yrd10 D.yrd11 D.yrd12 D.yrd13
+                  D.yrd14 D.yrd15 D.yrd16 D.yrd17 D.yrd18 D.yrd19 D.yrd20
+                  D.yrd21 D.yrd22 D.yrd23 D.yrd24 D.yrd25 D.yrd26 D.yrd27
+                  D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        Standard: _cons
+
+. esttab xtdpd GMM2Step ///
+>         using $root\Table7.rtf, replace se noobs compress nogaps label ///
+>         mtitle("xtdpd" "GMM2Step") ///
+>         title(Table 7: Use xtdpd to replicate xtabond) ///
+>         order(lnclag L.lnc lnp lny lnpn) nonotes ///
+>         keep(lnclag L.lnc lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table7.rtf)
+
+. 
+. *Question 8: dgmmiv(lnp lny lnpn, lag(1.)) and dgmmiv(lnp lny lnpn, lag(1.1))
+. eststo ABOption1: xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnp lny lnpn,lag(1 .)) div(yrd*) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+note: D.yrd2 dropped because of collinearity
+Warning:  variance matrix is nonsymmetric or highly singular
+
+Dynamic panel-data estimation                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =   1.0e+03               Wald chi2(0)      =          .
+                                                Prob > chi2       =          .
+Two-step results
+                                  (Std. Err. adjusted for clustering on state)
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .7172687          .        .       .            .           .
+             |
+         lnp |  -1.149093          .        .       .            .           .
+         lny |   .0513321          .        .       .            .           .
+        lnpn |  -.4735657          .        .       .            .           .
+        yrd3 |   .0158077          .        .       .            .           .
+        yrd4 |   .0226663          .        .       .            .           .
+        yrd5 |     .00526          .        .       .            .           .
+        yrd6 |   .0117945          .        .       .            .           .
+        yrd7 |  -.0501458          .        .       .            .           .
+        yrd8 |  -.0490879          .        .       .            .           .
+        yrd9 |   .0102092          .        .       .            .           .
+       yrd10 |   .0220371          .        .       .            .           .
+       yrd11 |  -.1096886          .        .       .            .           .
+       yrd12 |  -.2720725          .        .       .            .           .
+       yrd13 |  -.3230182          .        .       .            .           .
+       yrd14 |  -.2710118          .        .       .            .           .
+       yrd15 |  -.3682082          .        .       .            .           .
+       yrd16 |  -.3464403          .        .       .            .           .
+       yrd17 |  -.5173094          .        .       .            .           .
+       yrd18 |  -.6654752          .        .       .            .           .
+       yrd19 |  -.7487949          .        .       .            .           .
+       yrd20 |    -.68244          .        .       .            .           .
+       yrd21 |  -.5084176          .        .       .            .           .
+       yrd22 |  -.4033441          .        .       .            .           .
+       yrd23 |  -.3576278          .        .       .            .           .
+       yrd24 |  -.2856896          .        .       .            .           .
+       yrd25 |  -.2759218          .        .       .            .           .
+       yrd26 |  -.2553486          .        .       .            .           .
+       yrd27 |  -.2324404          .        .       .            .           .
+       yrd28 |   -.189853          .        .       .            .           .
+       yrd29 |  -.1714323          .        .       .            .           .
+       _cons |    8.46111          .        .       .            .           .
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(1/.).lnp L(1/.).lny L(1/.).lnpn
+        Standard: D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6 D.yrd7 D.yrd8 D.yrd9
+                  D.yrd10 D.yrd11 D.yrd12 D.yrd13 D.yrd14 D.yrd15 D.yrd16
+                  D.yrd17 D.yrd18 D.yrd19 D.yrd20 D.yrd21 D.yrd22 D.yrd23
+                  D.yrd24 D.yrd25 D.yrd26 D.yrd27 D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        Standard: _cons
+
+. eststo ABOption2: xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnp lny lnpn,lag(1 1)) div(yrd*) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+note: D.yrd2 dropped because of collinearity
+
+Dynamic panel-data estimation                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =    113                  Wald chi2(31)     =  479733.98
+                                                Prob > chi2       =     0.0000
+Two-step results
+                                  (Std. Err. adjusted for clustering on state)
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .8530535   .7966242     1.07   0.284    -.7083012    2.414408
+             |
+         lnp |  -.9016011   3.036671    -0.30   0.767    -6.853367    5.050165
+         lny |  -.0897139   2.004749    -0.04   0.964    -4.018949    3.839521
+        lnpn |   .2508419   1.460569     0.17   0.864    -2.611821    3.113505
+        yrd3 |   .0376062   .1024619     0.37   0.714    -.1632154    .2384279
+        yrd4 |   .0250774   .1809197     0.14   0.890    -.3295186    .3796735
+        yrd5 |   .0314119   .1885191     0.17   0.868    -.3380788    .4009026
+        yrd6 |   .0159134   .2424184     0.07   0.948     -.459218    .4910448
+        yrd7 |  -.0127692   .2139025    -0.06   0.952    -.4320104    .4064721
+        yrd8 |  -.0141883    .224823    -0.06   0.950    -.4548333    .4264567
+        yrd9 |   .0400696    .218177     0.18   0.854    -.3875495    .4676887
+       yrd10 |   .0715045   .2947355     0.24   0.808    -.5061664    .6491754
+       yrd11 |   .0016133   .4254513     0.00   0.997    -.8322559    .8354826
+       yrd12 |  -.0883671   .4222571    -0.21   0.834    -.9159758    .7392415
+       yrd13 |  -.1126737   .4735453    -0.24   0.812    -1.040806    .8154581
+       yrd14 |  -.0771222   .4800288    -0.16   0.872    -1.017961    .8637169
+       yrd15 |  -.1292549   .5567336    -0.23   0.816    -1.220433     .961923
+       yrd16 |  -.1272199   .5443428    -0.23   0.815    -1.194112    .9396723
+       yrd17 |  -.2338771   .7053022    -0.33   0.740    -1.616244     1.14849
+       yrd18 |  -.3032569   .9216622    -0.33   0.742    -2.109682    1.503168
+       yrd19 |  -.3257217   1.084465    -0.30   0.764    -2.451235    1.799791
+       yrd20 |  -.2923712    1.04317    -0.28   0.779    -2.336946    1.752204
+       yrd21 |  -.2157862   .7594901    -0.28   0.776     -1.70436    1.272787
+       yrd22 |  -.1866395   .5443757    -0.34   0.732    -1.253596    .8803172
+       yrd23 |  -.1434147    .534651    -0.27   0.789    -1.191311     .904482
+       yrd24 |   -.115201   .4636762    -0.25   0.804     -1.02399    .7935878
+       yrd25 |  -.1312231   .3843027    -0.34   0.733    -.8844425    .6219964
+       yrd26 |  -.1168041   .3374723    -0.35   0.729    -.7782377    .5446296
+       yrd27 |  -.1167324   .2643322    -0.44   0.659     -.634814    .4013491
+       yrd28 |  -.1015867   .2071592    -0.49   0.624    -.5076112    .3044379
+       yrd29 |   -.079592   .2407994    -0.33   0.741    -.5515503    .3923662
+       _cons |   4.580405   27.03294     0.17   0.865    -48.40318    57.56399
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(1/1).lnp L(1/1).lny L(1/1).lnpn
+        Standard: D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6 D.yrd7 D.yrd8 D.yrd9
+                  D.yrd10 D.yrd11 D.yrd12 D.yrd13 D.yrd14 D.yrd15 D.yrd16
+                  D.yrd17 D.yrd18 D.yrd19 D.yrd20 D.yrd21 D.yrd22 D.yrd23
+                  D.yrd24 D.yrd25 D.yrd26 D.yrd27 D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        Standard: _cons
+
+. esttab ABOption1 ABOption2 ///
+>         using $root\Table8.rtf, replace se noobs compress nogaps label ///
+>         mtitle("AB-Option1" "AB-Option2") ///
+>         title(Table 8: dgmmiv(lnp lny lnpn,lag(1 .)) and dgmmiv(lnp lny lnpn,lag(1 1))) ///
+>         order(L.lnc lnp lny lnpn) nonotes ///
+>         keep(L.lnc lnp lny lnpn)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table8.rtf)
+
+. 
+. *Question 9: lgmmiv(lnc) and lgmmiv(lnc lnp lny lnpn)
+. eststo ABOption3:  xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnc lnp lny lnpn,lag(1 .)) div(yrd*) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+note: D.yrd2 dropped because of collinearity
+
+Dynamic panel-data estimation                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =   1.1e+03               Wald chi2(31)     =   58955.48
+                                                Prob > chi2       =     0.0000
+Two-step results
+                                  (Std. Err. adjusted for clustering on state)
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .8998949   4.374501     0.21   0.837     -7.67397     9.47376
+             |
+         lnp |  -.6232395   20.38275    -0.03   0.976    -40.57269    39.32621
+         lny |   .1173036   6.000629     0.02   0.984    -11.64371    11.87832
+        lnpn |  -.0896525   12.43872    -0.01   0.994    -24.46909    24.28979
+        yrd3 |   .0306987   .2119452     0.14   0.885    -.3847062    .4461037
+        yrd4 |   .0049779    .538046     0.01   0.993    -1.049573    1.059529
+        yrd5 |   .0079737   .5810623     0.01   0.989    -1.130887    1.146835
+        yrd6 |  -.0094933   .9919867    -0.01   0.992    -1.953751    1.934765
+        yrd7 |  -.0360569   .6840992    -0.05   0.958    -1.376867    1.304753
+        yrd8 |  -.0475681    1.10934    -0.04   0.966    -2.221834    2.126697
+        yrd9 |   .0118877   1.075469     0.01   0.991    -2.095993    2.119769
+       yrd10 |   .0250748    1.22552     0.02   0.984      -2.3769     2.42705
+       yrd11 |  -.0614725    1.36041    -0.05   0.964    -2.727827    2.604882
+       yrd12 |  -.1444012   1.538186    -0.09   0.925    -3.159191    2.870389
+       yrd13 |  -.1676642   1.960808    -0.09   0.932    -4.010777    3.675448
+       yrd14 |  -.1239558    1.93325    -0.06   0.949    -3.913056    3.665144
+       yrd15 |  -.1775263    2.49577    -0.07   0.943    -5.069145    4.714093
+       yrd16 |     -.1775    2.16829    -0.08   0.935    -4.427269    4.072269
+       yrd17 |  -.2793606   3.375952    -0.08   0.934    -6.896104    6.337383
+       yrd18 |  -.3382196   5.142464    -0.07   0.948    -10.41726    9.740825
+       yrd19 |  -.3651948   6.291521    -0.06   0.954    -12.69635    11.96596
+       yrd20 |  -.3139194   6.169786    -0.05   0.959    -12.40648    11.77864
+       yrd21 |  -.2350584   4.530836    -0.05   0.959    -9.115334    8.645217
+       yrd22 |  -.2022267   3.277629    -0.06   0.951    -6.626262    6.221809
+       yrd23 |   -.158944   3.292131    -0.05   0.961    -6.611403    6.293515
+       yrd24 |  -.1252423   2.651656    -0.05   0.962    -5.322392    5.071908
+       yrd25 |  -.1392478    2.25796    -0.06   0.951    -4.564769    4.286273
+       yrd26 |  -.1335065    2.03331    -0.07   0.948     -4.11872    3.851707
+       yrd27 |  -.1303734   1.613613    -0.08   0.936    -3.292997     3.03225
+       yrd28 |  -.1162465   1.251806    -0.09   0.926    -2.569741    2.337248
+       yrd29 |  -.0884691    1.47532    -0.06   0.952    -2.980043    2.803105
+       _cons |    2.71344   140.1618     0.02   0.985    -271.9987    277.4256
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(1/.).lnc L(1/.).lnp L(1/.).lny L(1/.).lnpn
+        Standard: D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6 D.yrd7 D.yrd8 D.yrd9
+                  D.yrd10 D.yrd11 D.yrd12 D.yrd13 D.yrd14 D.yrd15 D.yrd16
+                  D.yrd17 D.yrd18 D.yrd19 D.yrd20 D.yrd21 D.yrd22 D.yrd23
+                  D.yrd24 D.yrd25 D.yrd26 D.yrd27 D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        Standard: _cons
+
+. eststo ABOption4:  xtdpd l(0/1).lnc lnp lny lnpn yrd*, dgmmiv(lnc lnp lny lnpn,lag(1 1)) div(yrd*) twostep vce(robust)
+note: yrd1 dropped from div() because of collinearity
+note: yrd1 dropped because of collinearity
+note: yrd30 dropped because of collinearity
+note: D.yrd2 dropped because of collinearity
+
+Dynamic panel-data estimation                   Number of obs     =      1,334
+Group variable: state                           Number of groups  =         46
+Time variable: yr
+                                                Obs per group:
+                                                              min =         29
+                                                              avg =         29
+                                                              max =         29
+
+Number of instruments =    141                  Wald chi2(31)     =  106109.67
+                                                Prob > chi2       =     0.0000
+Two-step results
+                                  (Std. Err. adjusted for clustering on state)
+------------------------------------------------------------------------------
+             |              WC-Robust
+         lnc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         lnc |
+         L1. |   .7018575   .6383778     1.10   0.272    -.5493399    1.953055
+             |
+         lnp |  -.9851601   1.744243    -0.56   0.572    -4.403813    2.433493
+         lny |   -.192078   1.878352    -0.10   0.919     -3.87358    3.489424
+        lnpn |  -.3243241    2.23577    -0.15   0.885    -4.706354    4.057705
+        yrd3 |   .0321797   .0749254     0.43   0.668    -.1146714    .1790307
+        yrd4 |   .0310882   .1366093     0.23   0.820     -.236661    .2988375
+        yrd5 |    .030825   .1799404     0.17   0.864    -.3218517    .3835016
+        yrd6 |   .0308722   .2284252     0.14   0.892    -.4168329    .4785773
+        yrd7 |  -.0173333   .2231573    -0.08   0.938    -.4547136     .420047
+        yrd8 |  -.0112465   .2391577    -0.05   0.962     -.479987    .4574941
+        yrd9 |   .0406155   .2203694     0.18   0.854    -.3913006    .4725316
+       yrd10 |   .0668018   .2951027     0.23   0.821    -.5115889    .6451925
+       yrd11 |  -.0313632   .4055166    -0.08   0.938     -.826161    .7634347
+       yrd12 |  -.1773612   .3339852    -0.53   0.595    -.8319602    .4772379
+       yrd13 |  -.2254321   .2832433    -0.80   0.426    -.7805787    .3297145
+       yrd14 |  -.1811263   .2643713    -0.69   0.493    -.6992846     .337032
+       yrd15 |  -.2563473   .2999083    -0.85   0.393    -.8441568    .3314622
+       yrd16 |   -.236597   .3086929    -0.77   0.443    -.8416239      .36843
+       yrd17 |  -.3933187   .2701973    -1.46   0.145    -.9228957    .1362584
+       yrd18 |  -.5317681   .2415519    -2.20   0.028    -1.005201   -.0583351
+       yrd19 |  -.6064829    .311212    -1.95   0.051    -1.216447    .0034814
+       yrd20 |    -.55341   .2870261    -1.93   0.054    -1.115971    .0091509
+       yrd21 |  -.4098185   .2306587    -1.78   0.076    -.8619013    .0422642
+       yrd22 |  -.3251633   .1703353    -1.91   0.056    -.6590144    .0086878
+       yrd23 |  -.2871706    .159909    -1.80   0.073    -.6005865    .0262452
+       yrd24 |  -.2176343   .0854898    -2.55   0.011    -.3851912   -.0500775
+       yrd25 |   -.222196   .0792608    -2.80   0.005    -.3775443   -.0668478
+       yrd26 |  -.2005964   .0995482    -2.02   0.044    -.3957073   -.0054855
+       yrd27 |  -.1888486   .0747334    -2.53   0.012    -.3353234   -.0423738
+       yrd28 |  -.1621775   .0799814    -2.03   0.043    -.3189382   -.0054168
+       yrd29 |  -.1464863    .128578    -1.14   0.255    -.3984945     .105522
+       _cons |   9.307517   21.86434     0.43   0.670     -33.5458    52.16083
+------------------------------------------------------------------------------
+Instruments for differenced equation
+        GMM-type: L(1/1).lnc L(1/1).lnp L(1/1).lny L(1/1).lnpn
+        Standard: D.yrd2 D.yrd3 D.yrd4 D.yrd5 D.yrd6 D.yrd7 D.yrd8 D.yrd9
+                  D.yrd10 D.yrd11 D.yrd12 D.yrd13 D.yrd14 D.yrd15 D.yrd16
+                  D.yrd17 D.yrd18 D.yrd19 D.yrd20 D.yrd21 D.yrd22 D.yrd23
+                  D.yrd24 D.yrd25 D.yrd26 D.yrd27 D.yrd28 D.yrd29 D.yrd30
+Instruments for level equation
+        Standard: _cons
+
+. esttab ABOption3 ABOption4 ///
+>         using $root\Table9.rtf, replace se noobs compress nogaps label ///
+>         mtitle("AB-Option3" "AB-Option4") ///
+>         title(Table 9: lgmmiv(lnc) and lgmmiv(lnc lnp lny lnpn)) ///
+>         order(L.lnc lnp lny lnpn) nonotes ///
+>         keep(L.lnc lnp lny lnpn)
+(note: file C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table9.rtf not found)
+(output written to C:\Users\cl3852\Documents\GitHub\PanelEconometrics\Assignments\HW5\Table9.rtf)
+
+. 
+. 
 end of do-file
-
-r(608);
-
-. help lag
 
