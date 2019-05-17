@@ -19,7 +19,6 @@ Little things, one step at a time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Unrelated notes:
 Summer: projects, meeting, coursera
-call Yunbo after my urban economics conference at DC
 after moving into Alex's: get a new non-driver ID
 https://dmv.ny.gov/id-card/bget-non-driver-id-card-ndid
 Foreign passport, SSN, >=2 address proof, filling out https://dmv.ny.gov/forms/mv44.pdf
