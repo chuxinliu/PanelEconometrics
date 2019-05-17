@@ -1,0 +1,148 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb,amsmath,amsfonts,eurosym,geometry,ulem,graphicx,caption,color,sectsty,comment,footmisc,caption,natbib,pdflscape,subfigure,array,hyperref}
+\usepackage{cite}
+\normalem
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}}  
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}{Proposition}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\usepackage[sc]{mathpazo} % Use the Palatino font
+
+
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{subhyp}{Hypothesis}[hyp]
+\renewcommand{\thesubhyp}{\thehyp\alph{subhyp}}
+
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+
+\geometry{left=1.0in,right=1.0in,top=1.0in,bottom=1.0in}
+
+\begin{document}
+
+\begin{titlepage}
+\title{\textbf{Markups and Capital-Skill Complementarity}}
+\author{Meng-Ting Chen\thanks{Graduate Center, CUNY; mchen2@gradcenter.cuny.edu}}
+\date{May 9, 2019}
+\maketitle
+\begin{abstract}
+\noindent Increasing market power has become new common phenomenon since 1980s. Industries are characterized by very few firms that feature higher productivity, larger size, higher markups, and lower labor share. Technology improvement could be the factor driving firms' markups.
+This paper seeks to bridge the gap between increasing firms' markups in product markets and the decline in labor share, especially decreasing labor share stem from lowering unskilled labor wages. Capital-skill complementarity is the crucial source behind this new trend.\\
+\vspace{0in}\\
+\noindent\textbf{Keywords:} Heterogeneous Firms, Markups, Capital-Skill Complementarity, Labor Share\\
+\vspace{0in}\\
+\noindent\textbf{JEL Codes:} \\
+
+\bigskip
+\end{abstract}
+\setcounter{page}{0}
+\thispagestyle{empty}
+\end{titlepage}
+\pagebreak \newpage
+
+
+
+
+\doublespacing
+
+
+\section{Introduction} \label{sec:introduction}
+This paper examines the role of capital-skill complementarity in driving firm’s markups in product markets and how the increasing markups affect aggregate labor share. Ever since \citet{de2017rise} documented that the evolution of markups rose from 21\% in 1980 to 61\% nowadays,  researchers started to pay more attention on how the performance of large firms influence and shape the whole economic activities. The rising aggregate markups stem from rising firms' markups in the upper percentiles. \citet{gabaix2011granular} proposes that idiosyncratic firm-level shocks can explain an important part of aggregate movements and granularity provide a microfoundation for aggregate shocks. Granularity plays an important rule when analyze the aggregate-level economy. Increasing market power of few firms has become new common phenomena after globalization. In fact, the Antitrust Laws prohibit firms from extracting  market power in product markets in order to protect consumer welfare. However, researchers still find out few firms gradually claim higher markups \citep{de2018global} and a decline in the labor share \citep{autor2017fall}, even more, move on to “superstar firm”. \citep{autor2017dp11810}. Antitrust regulators pay little attention to labor market power despite the labor economics literature finding that firms can have substantial market power in the labor market \citep{staiger2010there,falch2010elasticity,ransom2010estimating}. Monopsony in the labor market provides for conditions where firms are able to pay workers less than their marginal productivity. \citet{autor2017fall} find that firms have increased labor market concentration by lowering wages in the U.S. economy.
+
+The existing literature has documented that rising markups in few large firms accounts for the decline in labor share. However, the reasons that larger firms lower the labor share over sales are still unclear. Technology improvement could be the reason behind the decline in labor share \citep{autor2017dp11810}. \citet{krusell2000capital} points out that the relative quantity of skilled labor has increased substantially and that the skill premium has grown significantly since 1980. Capital-skill complementarity has been well documented as a prominent fact and how it would affect wage inequality \citep{polgreen2008capital,lindquist2004capital,duffy2004capital}. Larger firms have the ability to access new technology and produce at more efficient level. Accompany with skilled labor, the log supermodularity generates positive assortative matching between firms and workers. This self-reinforcements is called "capital-skill complementarity". Therefore, larger firms could produce at even more efficient level. Although larger firms need pay higher wages to attract skilled labors, they do not need to hire more workers to substitute for capital as in the case of transitional firms. \citet{eeckhout2014spatial} provide insight on spatial sorting between skilled workers and cities. This paper seeks to bridge the gap between increasing firms' markups in product markets and decline in labor share, especially decreasing labor share that stem from falling unskilled labor wages.   
+
+\section{Data} 
+\label{sec:literature}
+Although the rising market concentration are across every different sectors \citep{autor2017fall}, this paper will focus more on manufacturing sectors since I need to link Compustat to the US Census of manufacturing establishments in order to construct different wage bills. Further research on wage payments between skilled and unskilled labors needs to explore confidential employee-employer data from the LEHD (Longitudinal Employer-Household Dynamics) Program, which is constructed by the U.S. Census Bureau, or ADP (Automatic Data Processing), which is a consulting company that maintains an extensive payroll data.
+
+Compustat provides information of firm-level financial statements and includes sales, input expenditures, and capital stock information over a substantial period of time. The firms in Compustat account for 29\% of private US employment \citep{davis2006volatility}. The information of firms in Compustat allow me to use the production approach for measuring markups. The Economic Census is constructed every five years and contains the information of establishment-level sales and wage bills. The time frame start in 1980, which the trend of increasing markups and decreasing labor share start rising, up until 2017, which is latest published by Census. Following closely the definition in \citet{de2017rise}, I use “Cost of Goods Sold” (COGS) as the variable inputs costs, "Property, Plant and Equipment" (PPEGT) as Gross Capital, which needs to adjust for the industry-level input price deflator and user cost, “Selling, General and Administrative Expenses” (SG&A) as fixed costs 
+
+\section{Estimation}
+\citet{de2012markups} proposed a novel way to estimate markups using information from the firm’s financial statements. The method does not require any assumptions on market structure or the functional form of the demand that firms face. Instead, this production function approach requries a detailed treatment of the production function to estimate markups by the cost-minimization structure approach.
+
+Consider an economy with $N$ firms, indexed by $i = 1, ..., N$. Firms are heterogeneous in their productivity. Each firm $i$ uses $K_{it}$ units of capital, $S_{it}$ units of skilled labor, and $N_{it}$ units of unskilled labor to produce $Q_{it}$. Given the production function, firm $i$ minimizes the contemporaneous cost of production in the period $t$ following \citet{krusell2000capital}:
+\begin{equation}
+    Q_{it}=Q_{it}(Z_{it},K_{it},S_{it},N_{it})=Z_{it}\left (\nu N_{it}^{\sigma}+(1-\nu)(\tau K_{it}^{\rho}+(1-\tau)S_{it}^{\rho})^{\frac{\sigma}{\rho}}\right)^{\frac{1}{\sigma}}
+\end{equation}
+where $Z_{it}$ is the firm-specific productivity. The key assumption is that within each period, skilled or unskilled labor adjusts freely, whereas capital is subject to adjustment costs and other frictions. The Lagrangian objective function associated with the firm’s cost minimization:
+\begin{equation}
+    \mathcal{L}(K_{it},S_{it},N_{it},\lamda_{it})=w_{it}^{N}N_{it}+w_{it}^{S}S_{it}+(r+\delta)K_{it}+F_{it}-\lambda_{it}(Q_{it}-\bar{Q})
+\end{equation}
+where $w_{it}^{N}$ and $w_{it}^{S}$ represent the wages of unskilled or skilled labor, respectively, $r$ is the user cost of capital, $F_{it}$ is the fixed cost, $\bar{Q}$ is a scalar and $\lambda$ is the Lagrange multiplier and is a direct measure of marginal cost. I assume that these input prices are given to the firm. The output elasticity of worker of skill $j\in \{S,N\}$ is given by Equation:
+\begin{equation}
+    \theta^{S}_{it}=\frac{1}{\lambda_{it}}\frac{w^{S}_{it}S_{it}}{Q_{it}},\qquad \theta^{N}_{it}=\frac{1}{\lambda_{it}}\frac{w^{N}_{it}N_{it}}{Q_{it}}
+\end{equation}
+
+The estimation procedure consists of two steps. In the first step, I estimate an approximation of the production function in Equation (1) using a translog functional form:
+\begin{equation}
+    q_{it}=\gamma_{s}s_{it}+\gamma_{n}n_{it}+\gamma_{k}k_{it}+\sum_{x\in \{s,n,k\}}\gamma_{xx}x_{it}^{2}+\sum_{w\neq x}\gamma_{xw}x_{it}w_{it}+z_{it}+\varepsilon_{it}
+\end{equation}
+where the lower case letters stand for the log form of variable represented by the corresponding capital letter. In order to control for unobserved productivity shocks, which are potentially correlated with labor choices, I follow \citet{de2012markups} and \citet{de2017rise} to proxy for productivity using the demand for materials, $m_{it}=m_{it}(z_{it},k_{it},s_{it},n_{it})$, and assume that the demand for materials is strictly monotone in $z_{it}$. In the first stage, I estimate the following Equation
+\begin{equation}
+    q_{it}=\phi(m_{it},k_{it},s_{it},n_{it})+\varepsilon_{it}
+\end{equation}
+to obtain an estimates of expected output ($\hat{\phi}$) and an estimate of $\varepsilon_{it}$. In the second stage, the productivity process is given by $z_{it}=g(z_{it-1})+\xi_{it}$, which computes by equation (4), and then I estimate the production function parameters using GMM moment conditions of the following form to obtain the set of parameters $\gamma$
+\begin{equation}
+    \mathbb{E}[\xi_{it}(\gamma)W^{j}]=0, \qquad j\in\{s,n,k\}
+\end{equation}
+where $W^{j}$ is an instrument for skilled labor, unskilled labor, capital, or materials. Capital is used as its own instrument since capital is decided one period ahead and wages are assumed to be correlated across times so lagged skilled and unskilled labor should be valid instruments. Once I obtain the set of parameters $\gamma$ from (6), I can estimate the output elasticity of skilled labor, unskilled labor, and capital by
+$$\hat{\theta}^{k}_{it}=\hat{\gamma}_{k}+2\hat{\gamma}_{kk}k_{it}+\hat{\gamma}_{sk}s_{it}+\hat{\gamma}_{nk}n_{it}$$
+$$\hat{\theta}^{s}_{it}=\hat{\gamma}_{s}+2\hat{\gamma}_{ss}s_{it}+\hat{\gamma}_{ks}k_{it}+\hat{\gamma}_{ns}n_{it}$$
+$$\hat{\theta}^{n}_{it}=\hat{\gamma}_{n}+2\hat{\gamma}_{nn}n_{it}+\hat{\gamma}_{kn}k_{it}+\hat{\gamma}_{sn}s_{it}$$
+Using the estimate of $\varepsilon_{it}$ from the first stage and computing markups as
+\begin{equation}
+    \hat{\mu}_{it}=\hat{\theta}^{n}_{it} \left ( \frac{P_{it}Q_{it}/\exp(\hat{\varepsilon_{it}})}{W_{it}^{n}N_{it}} \right )
+\end{equation}
+
+
+
+
+In a second step, I use the reduced-form estimates of the coefficients in equation (6) to recover the structural parameters of Equation (1) using a minimum distance estimation procedure. With an estimate the coefficients in equation (6) obtained in the first step of the estimation procedure, I compute an efficient minimum distance estimator of the vector of structural parameters.
+
+
+
+
+
+
+
+\singlespacing
+\setlength\bibsep{0pt}
+\bibliographystyle{newapa}
+\bibliography{citations}
+
+
+
+%\clearpage
+
+%\onehalfspacing
+
+%\section*{Tables} \label{sec:tab}
+%\addcontentsline{toc}{section}{Tables}
+
+
+
+%\clearpage
+
+%\section*{Figures} \label{sec:fig}
+%\addcontentsline{toc}{section}{Figures}
+
+%\begin{figure}[hp]
+%  \centering
+%  \includegraphics[width=.6\textwidth]{../fig/placeholder.pdf}
+%  \caption{Placeholder}
+%  \label{fig:placeholder}
+%\end{figure}
+
+
+
+
+
+
+\end{document}
