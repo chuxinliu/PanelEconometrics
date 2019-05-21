@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb,amsmath,amsfonts,eurosym,geometry,ulem,graphicx,caption,color,sectsty,comment,footmisc,caption,natbib,pdflscape,subfigure,array,hyperref}
+\usepackage{cite}
+\normalem
+\hypersetup{colorlinks,linkcolor={blue},citecolor={blue},urlcolor={red}}  
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}{Proposition}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\usepackage[sc]{mathpazo} 
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{subhyp}{Hypothesis}[hyp]
+\renewcommand{\thesubhyp}{\thehyp\alph{subhyp}}
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\geometry{left=1.0in,right=1.0in,top=1.0in,bottom=1.0in}
+
+\begin{document}
+
+
+\title{\textbf{Economic Recession on the Health of Mothers and Newborns}}
+\author{Chuxin Liu\thanks{Graduate Center, CUNY; cliu4@gradcenter.cuny.edu}}
+\date{May 16, 2019}
+\maketitle
+
+
+\section{Introduction} \label{sec:introduction}
+
+This project will be using longitudinal data from the Fragile Families and Child Wellbeing Study (FF) to investigate the impact of economic recession on the health of mothers and newborn children. FF covers a wide range of physical and mental health outcomes, as well as details of health behavior. FF also contains housing and neighborhood information. This project intends to find that increases in local unemployment rate will affect health behaviors and health outcomes, with worsening neighborhood and living condition as one of the channels.
+
+The great recession in the US was deeper and longer than any previous recession since the 1930s. From its peak-December 2007 to June 2009-output contracted by 4\%, the employment rate fell by 6.3\% and the unemployment rate went from 4.8\% to 10.6\% at its peak in January 2010. The start of the great recession was severe, sudden and sharp, and many people experience some form of financial, psychological or physical strain. 
+
+New evidence on the effects of the great recession has confirmed that losses were disproportionately concentrated among minorities, youth, low income and less educated workers. Since the great recession represented a huge financial and psychological shock for many households, especially for the most vulnerable, it may have had a significant impact on people’s health. Many studies have examined the relationship between economic downturns and health outcomes. However, the conclusions are mixed. This study aims to contribute to this discussion by investigating the impact of the great recession on the physical and mental health and health behavior of newborn babies and their mothers.
+ 
+ 
+\section{Research question} 
+\label{sec:question}
+\begin{enumerate}
+    \item What are the short-term and long-term effects of economic recession on the health behavior and outcomes of mothers and newborn children? 
+	\item Does economic recession affect mothers’ and children’s health by changing their living conditions?
+\end{enumerate}
+
+
+\section{Data}
+\label{sec:data}
+
+\begin{enumerate}
+	\item Public Data from Fragile Families and Child Wellbeing study (FF) 
+
+	Fragile Families and Child Wellbeing study (FF) collects data on approximately 5000 births in 75 hospitals in 20 large US cities with population of 200,000 or more \citet{reichman2001fragile}. When weighted, the sample is representative of births of these 20 cities, with a smaller sample that is representative of urban births in all American cities with populations over 200,000.
+
+	Following \citet{currie2015great}, Wave 4, Wave 5, and Wave 6 will be pooled together to estimate the short-term and long-term effects of recession on health, while some information from the previous waves will be used as potential control variables or instrument variables.
+	
+	\begin{itemize}
+	    \item Wave 1 (baseline): 1998-2000, collected at hospitals when babies were born
+	    \item Wave 2: Year 1, 1999-2001
+	    \item Wave 3: Year 3, 2001-2003
+	    \item Wave 4: Year 5, 2003-2005, before recession
+	    \item Wave 5: Year 9, 2007-2010, during recession
+	    \item Wave 6: Year 15, 2013-2015, after recession
+	\end{itemize}
+
+	\item Restricted Use Contract Data from Fragile Families and Child Wellbeing study (FF) 
+
+	Fragile Families and Child Wellbeing study (FF) provides residential context files for restricted use. It's residential context files have geographic identifiers, census tract measures, labor market and macroeconomic information for all waves. Access to restricted data will allow me to explore how economic recession impact the neighborhoods and help explain how it impacts health of mothers and children.
+
+	\item National database of SNAP authorized retailers (2008-2018)
+
+	This national database of SNAP authorized retailers from 2008 to 2018 can be matched with the families in our sample using the geographic identifiers. It can potentially captured how economic recession changes neighborhoods by changing the local food markets, which is crucial for the health of vulnerable families.
+\end{enumerate}
+
+
+\section{Estimation Models}
+\label{sec:models}
+
+\begin{equation}
+    5464645-=--2313
+\end{equation}
+
+
+\setlength\bibsep{0pt}
+\bibliographystyle{newapa}
+\bibliography{citation}
+
+\end{document}
